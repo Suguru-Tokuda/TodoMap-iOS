@@ -11,14 +11,28 @@
 		BBA4F3B82A7F199C00DF4148 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA4F3B72A7F199C00DF4148 /* ContentView.swift */; };
 		BBA4F3BA2A7F199D00DF4148 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBA4F3B92A7F199D00DF4148 /* Assets.xcassets */; };
 		BBA4F3BD2A7F199D00DF4148 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBA4F3BC2A7F199D00DF4148 /* Preview Assets.xcassets */; };
+		BBA4F3CD2A7F1B6D00DF4148 /* CustomTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA4F3CC2A7F1B6D00DF4148 /* CustomTabBarView.swift */; };
+		BBA4F3CF2A7F1B9400DF4148 /* TabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA4F3CE2A7F1B9400DF4148 /* TabBarItem.swift */; };
+		BBA4F3D12A7F1C0F00DF4148 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA4F3D02A7F1C0F00DF4148 /* String.swift */; };
+		BBA4F3D42A7F1CD900DF4148 /* CustomTabBarItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA4F3D32A7F1CD900DF4148 /* CustomTabBarItemView.swift */; };
+		BBA4F3D62A7F1F1800DF4148 /* TabBarItemPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA4F3D52A7F1F1800DF4148 /* TabBarItemPreferenceKey.swift */; };
+		BBA4F3D82A7F214800DF4148 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA4F3D72A7F214800DF4148 /* Color.swift */; };
+		BBA4F3DA2A7F233A00DF4148 /* TabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA4F3D92A7F233A00DF4148 /* TabsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		BBA4F3B22A7F199C00DF4148 /* MapTodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapTodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BBA4F3B22A7F199C00DF4148 /* TodoMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBA4F3B52A7F199C00DF4148 /* MapTodoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTodoApp.swift; sourceTree = "<group>"; };
 		BBA4F3B72A7F199C00DF4148 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		BBA4F3B92A7F199D00DF4148 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BBA4F3BC2A7F199D00DF4148 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		BBA4F3CC2A7F1B6D00DF4148 /* CustomTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarView.swift; sourceTree = "<group>"; };
+		BBA4F3CE2A7F1B9400DF4148 /* TabBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarItem.swift; sourceTree = "<group>"; };
+		BBA4F3D02A7F1C0F00DF4148 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		BBA4F3D32A7F1CD900DF4148 /* CustomTabBarItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarItemView.swift; sourceTree = "<group>"; };
+		BBA4F3D52A7F1F1800DF4148 /* TabBarItemPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarItemPreferenceKey.swift; sourceTree = "<group>"; };
+		BBA4F3D72A7F214800DF4148 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		BBA4F3D92A7F233A00DF4148 /* TabsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,7 +49,7 @@
 		BBA4F3A92A7F199B00DF4148 = {
 			isa = PBXGroup;
 			children = (
-				BBA4F3B42A7F199C00DF4148 /* MapTodo */,
+				BBA4F3B42A7F199C00DF4148 /* TodoMap */,
 				BBA4F3B32A7F199C00DF4148 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,20 +57,26 @@
 		BBA4F3B32A7F199C00DF4148 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BBA4F3B22A7F199C00DF4148 /* MapTodo.app */,
+				BBA4F3B22A7F199C00DF4148 /* TodoMap.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		BBA4F3B42A7F199C00DF4148 /* MapTodo */ = {
+		BBA4F3B42A7F199C00DF4148 /* TodoMap */ = {
 			isa = PBXGroup;
 			children = (
-				BBA4F3B52A7F199C00DF4148 /* MapTodoApp.swift */,
 				BBA4F3B72A7F199C00DF4148 /* ContentView.swift */,
+				BBA4F3B52A7F199C00DF4148 /* MapTodoApp.swift */,
 				BBA4F3B92A7F199D00DF4148 /* Assets.xcassets */,
+				BBA4F3C32A7F1AA900DF4148 /* Core */,
+				BBA4F3C42A7F1AB300DF4148 /* Extensions */,
+				BBA4F3C52A7F1ABB00DF4148 /* Models */,
 				BBA4F3BB2A7F199D00DF4148 /* Preview Content */,
+				BBA4F3C62A7F1AC300DF4148 /* Services */,
+				BBA4F3C72A7F1AC900DF4148 /* Utilities */,
+				BBA4F3C82A7F1AD100DF4148 /* ViewModifiers */,
 			);
-			path = MapTodo;
+			path = TodoMap;
 			sourceTree = "<group>";
 		};
 		BBA4F3BB2A7F199D00DF4148 /* Preview Content */ = {
@@ -67,12 +87,85 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		BBA4F3C32A7F1AA900DF4148 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				BBA4F3CA2A7F1B4200DF4148 /* Components */,
+				BBA4F3C92A7F1B2D00DF4148 /* Tabs */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		BBA4F3C42A7F1AB300DF4148 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				BBA4F3D02A7F1C0F00DF4148 /* String.swift */,
+				BBA4F3D72A7F214800DF4148 /* Color.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		BBA4F3C52A7F1ABB00DF4148 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		BBA4F3C62A7F1AC300DF4148 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		BBA4F3C72A7F1AC900DF4148 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		BBA4F3C82A7F1AD100DF4148 /* ViewModifiers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModifiers;
+			sourceTree = "<group>";
+		};
+		BBA4F3C92A7F1B2D00DF4148 /* Tabs */ = {
+			isa = PBXGroup;
+			children = (
+				BBA4F3D92A7F233A00DF4148 /* TabsView.swift */,
+			);
+			path = Tabs;
+			sourceTree = "<group>";
+		};
+		BBA4F3CA2A7F1B4200DF4148 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				BBA4F3CB2A7F1B4F00DF4148 /* CustomTabView */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		BBA4F3CB2A7F1B4F00DF4148 /* CustomTabView */ = {
+			isa = PBXGroup;
+			children = (
+				BBA4F3D32A7F1CD900DF4148 /* CustomTabBarItemView.swift */,
+				BBA4F3CC2A7F1B6D00DF4148 /* CustomTabBarView.swift */,
+				BBA4F3CE2A7F1B9400DF4148 /* TabBarItem.swift */,
+				BBA4F3D52A7F1F1800DF4148 /* TabBarItemPreferenceKey.swift */,
+			);
+			path = CustomTabView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		BBA4F3B12A7F199B00DF4148 /* MapTodo */ = {
+		BBA4F3B12A7F199B00DF4148 /* TodoMap */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BBA4F3C02A7F199D00DF4148 /* Build configuration list for PBXNativeTarget "MapTodo" */;
+			buildConfigurationList = BBA4F3C02A7F199D00DF4148 /* Build configuration list for PBXNativeTarget "TodoMap" */;
 			buildPhases = (
 				BBA4F3AE2A7F199B00DF4148 /* Sources */,
 				BBA4F3AF2A7F199B00DF4148 /* Frameworks */,
@@ -82,9 +175,9 @@
 			);
 			dependencies = (
 			);
-			name = MapTodo;
+			name = TodoMap;
 			productName = MapTodo;
-			productReference = BBA4F3B22A7F199C00DF4148 /* MapTodo.app */;
+			productReference = BBA4F3B22A7F199C00DF4148 /* TodoMap.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -102,7 +195,7 @@
 					};
 				};
 			};
-			buildConfigurationList = BBA4F3AD2A7F199B00DF4148 /* Build configuration list for PBXProject "MapTodo" */;
+			buildConfigurationList = BBA4F3AD2A7F199B00DF4148 /* Build configuration list for PBXProject "TodoMap" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -115,7 +208,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BBA4F3B12A7F199B00DF4148 /* MapTodo */,
+				BBA4F3B12A7F199B00DF4148 /* TodoMap */,
 			);
 		};
 /* End PBXProject section */
@@ -137,7 +230,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBA4F3D62A7F1F1800DF4148 /* TabBarItemPreferenceKey.swift in Sources */,
+				BBA4F3D42A7F1CD900DF4148 /* CustomTabBarItemView.swift in Sources */,
+				BBA4F3CD2A7F1B6D00DF4148 /* CustomTabBarView.swift in Sources */,
 				BBA4F3B82A7F199C00DF4148 /* ContentView.swift in Sources */,
+				BBA4F3D12A7F1C0F00DF4148 /* String.swift in Sources */,
+				BBA4F3D82A7F214800DF4148 /* Color.swift in Sources */,
+				BBA4F3DA2A7F233A00DF4148 /* TabsView.swift in Sources */,
+				BBA4F3CF2A7F1B9400DF4148 /* TabBarItem.swift in Sources */,
 				BBA4F3B62A7F199C00DF4148 /* MapTodoApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -266,7 +366,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"MapTodo/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"TodoMap/Preview Content\"";
 				DEVELOPMENT_TEAM = FVEGF5DQ7U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -280,7 +380,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.stokuda.MapTodo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stokuda.TodoMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -295,7 +395,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"MapTodo/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"TodoMap/Preview Content\"";
 				DEVELOPMENT_TEAM = FVEGF5DQ7U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -309,7 +409,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.stokuda.MapTodo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stokuda.TodoMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -320,7 +420,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BBA4F3AD2A7F199B00DF4148 /* Build configuration list for PBXProject "MapTodo" */ = {
+		BBA4F3AD2A7F199B00DF4148 /* Build configuration list for PBXProject "TodoMap" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BBA4F3BE2A7F199D00DF4148 /* Debug */,
@@ -329,7 +429,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BBA4F3C02A7F199D00DF4148 /* Build configuration list for PBXNativeTarget "MapTodo" */ = {
+		BBA4F3C02A7F199D00DF4148 /* Build configuration list for PBXNativeTarget "TodoMap" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BBA4F3C12A7F199D00DF4148 /* Debug */,
