@@ -15,5 +15,7 @@ extension Color {
         let background = Color("Background")
         let secondaryBackground = Color("SecondaryBackground")
         let text = Color("TextColor")
+        let secondaryText = Color("SecondaryTextColor")
+        let blue = Color("BlueColor")
     }
 }
