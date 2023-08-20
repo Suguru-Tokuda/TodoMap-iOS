@@ -11,8 +11,8 @@ import MapKit
 struct CustomMapView: UIViewRepresentable, View {
     @Binding var coordinateRegion: MKCoordinateRegion
     @State var customMapView: MKMapView?
-    var onTap: ((_ coordinate: CLLocationCoordinate2D) -> Void)?
-    var onLongPress: ((_ coordinate: CLLocationCoordinate2D) -> Void)?
+    private var onTap: ((_ coordinate: CLLocationCoordinate2D) -> Void)?
+    private var onLongPress: ((_ coordinate: CLLocationCoordinate2D) -> Void)?
     var showUserLocation: Bool
     
     func makeUIView(context: UIViewRepresentableContext<CustomMapView>) -> MKMapView {
@@ -70,7 +70,7 @@ struct CustomMapView: UIViewRepresentable, View {
                 let coordinate = getCoordinate(point: point)
                 
                 if let coordinate = coordinate {
-                    print(coordinate)
+                    control.onTap!(coordinate)
                 }
             }
         }
