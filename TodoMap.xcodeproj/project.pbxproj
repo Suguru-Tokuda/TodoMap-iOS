@@ -36,6 +36,9 @@
 		BBA4F3D62A7F1F1800DF4148 /* TabBarItemPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA4F3D52A7F1F1800DF4148 /* TabBarItemPreferenceKey.swift */; };
 		BBA4F3D82A7F214800DF4148 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA4F3D72A7F214800DF4148 /* Color.swift */; };
 		BBA4F3DA2A7F233A00DF4148 /* TabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA4F3D92A7F233A00DF4148 /* TabsView.swift */; };
+		BBD948D52A91AA1700777393 /* TodoMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD948D42A91AA1700777393 /* TodoMapView.swift */; };
+		BBD948D72A91AA2500777393 /* TodoMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD948D62A91AA2500777393 /* TodoMapViewModel.swift */; };
+		BBD948DA2A91C1DE00777393 /* CustomMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD948D92A91C1DE00777393 /* CustomMapView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +72,9 @@
 		BBA4F3D52A7F1F1800DF4148 /* TabBarItemPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarItemPreferenceKey.swift; sourceTree = "<group>"; };
 		BBA4F3D72A7F214800DF4148 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		BBA4F3D92A7F233A00DF4148 /* TabsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsView.swift; sourceTree = "<group>"; };
+		BBD948D42A91AA1700777393 /* TodoMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoMapView.swift; sourceTree = "<group>"; };
+		BBD948D62A91AA2500777393 /* TodoMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoMapViewModel.swift; sourceTree = "<group>"; };
+		BBD948D92A91C1DE00777393 /* CustomMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMapView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,6 +221,7 @@
 		BBA4F3C32A7F1AA900DF4148 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				BBD948D12A91A9F900777393 /* TodoMap */,
 				BB629A8C2A82AAA700B14D49 /* TodoList */,
 				BBA4F3CA2A7F1B4200DF4148 /* Components */,
 				BBA4F3C92A7F1B2D00DF4148 /* Tabs */,
@@ -277,6 +284,7 @@
 		BBA4F3CA2A7F1B4200DF4148 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				BBD948D82A91C1C100777393 /* CustomMapView */,
 				BB42E1B52A8AD00A001D2F05 /* CheckCircle */,
 				BBA4F3CB2A7F1B4F00DF4148 /* CustomTabView */,
 			);
@@ -292,6 +300,39 @@
 				BBA4F3D52A7F1F1800DF4148 /* TabBarItemPreferenceKey.swift */,
 			);
 			path = CustomTabView;
+			sourceTree = "<group>";
+		};
+		BBD948D12A91A9F900777393 /* TodoMap */ = {
+			isa = PBXGroup;
+			children = (
+				BBD948D32A91AA0800777393 /* Views */,
+				BBD948D22A91AA0200777393 /* ViewModels */,
+			);
+			path = TodoMap;
+			sourceTree = "<group>";
+		};
+		BBD948D22A91AA0200777393 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				BBD948D62A91AA2500777393 /* TodoMapViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		BBD948D32A91AA0800777393 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BBD948D42A91AA1700777393 /* TodoMapView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		BBD948D82A91C1C100777393 /* CustomMapView */ = {
+			isa = PBXGroup;
+			children = (
+				BBD948D92A91C1DE00777393 /* CustomMapView.swift */,
+			);
+			path = CustomMapView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -374,6 +415,7 @@
 				BB629AA12A82AE3C00B14D49 /* PreviewProvider.swift in Sources */,
 				BB629A9A2A82ABB200B14D49 /* TodosViewModel.swift in Sources */,
 				BB629AA32A82B9B100B14D49 /* TodoItemGroupModel.swift in Sources */,
+				BBD948D72A91AA2500777393 /* TodoMapViewModel.swift in Sources */,
 				BB629AAF2A82D75900B14D49 /* TodoItemGroupEditView.swift in Sources */,
 				BB629A972A82AB7100B14D49 /* TodoItemGroupListView.swift in Sources */,
 				BBA4F3D12A7F1C0F00DF4148 /* String.swift in Sources */,
@@ -383,9 +425,11 @@
 				BB629AAD2A82D73A00B14D49 /* TodoItemGroupEditViewModel.swift in Sources */,
 				BB629A9F2A82ACAE00B14D49 /* Status.swift in Sources */,
 				BB629A9C2A82ABD300B14D49 /* TodoItemModel.swift in Sources */,
+				BBD948D52A91AA1700777393 /* TodoMapView.swift in Sources */,
 				BB629A952A82AB5400B14D49 /* TodoRowView.swift in Sources */,
 				BB629AA72A82C90A00B14D49 /* View.swift in Sources */,
 				BBA4F3CF2A7F1B9400DF4148 /* TabBarItem.swift in Sources */,
+				BBD948DA2A91C1DE00777393 /* CustomMapView.swift in Sources */,
 				BB629AA92A82CBB700B14D49 /* Date.swift in Sources */,
 				BB629AA52A82BBA100B14D49 /* LocationModel.swift in Sources */,
 				BBA4F3B62A7F199C00DF4148 /* MapTodoApp.swift in Sources */,
@@ -522,6 +566,7 @@
 				DEVELOPMENT_TEAM = FVEGF5DQ7U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs location to show it on the map.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -551,6 +596,7 @@
 				DEVELOPMENT_TEAM = FVEGF5DQ7U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs location to show it on the map.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
