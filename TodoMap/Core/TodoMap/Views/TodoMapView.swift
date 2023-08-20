@@ -14,10 +14,10 @@ struct TodoMapView: View {
     var body: some View {
         ZStack {
             CustomMapView(coordinateRegion: $vm.mapRegion, showUserLocation: true)
-                .onTap { coordinate in
+                .onTapGesture { coordinate in
                     print(coordinate)
                 }
-                .onLongPress { coordinate in
+                .onLongPressGesture { coordinate in
                     print(coordinate)
                 }
                 .ignoresSafeArea()

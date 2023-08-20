@@ -10,10 +10,15 @@ import MapKit
 
 struct CustomMapView: UIViewRepresentable, View {
     @Binding var coordinateRegion: MKCoordinateRegion
-    @State var customMapView: MKMapView?
-    private var onTap: ((_ coordinate: CLLocationCoordinate2D) -> Void)?
-    private var onLongPress: ((_ coordinate: CLLocationCoordinate2D) -> Void)?
+    @State var customMapView: MKMapView? = nil
+    private var onTap: ((_ coordinate: CLLocationCoordinate2D) -> Void)? = nil
+    private var onLongPress: ((_ coordinate: CLLocationCoordinate2D) -> Void)? = nil
     var showUserLocation: Bool
+    
+    init(coordinateRegion: Binding<MKCoordinateRegion>, showUserLocation: Bool) {
+        self._coordinateRegion = coordinateRegion
+        self.showUserLocation = showUserLocation
+    }
     
     func makeUIView(context: UIViewRepresentableContext<CustomMapView>) -> MKMapView {
         var mapView = MKMapView(frame: .zero)
@@ -64,7 +69,6 @@ struct CustomMapView: UIViewRepresentable, View {
         }
         
         @objc func getCoordinateTapGesture(_ sender: UITapGestureRecognizer) {
-            print("tapped")
             if sender.state == .ended {
                 let point = sender.location(in: control.customMapView)
                 let coordinate = getCoordinate(point: point)
@@ -89,13 +93,17 @@ struct CustomMapView: UIViewRepresentable, View {
 }
 
 extension CustomMapView {
-    func onTap(perform action: ((_ coordinate: CLLocationCoordinate2D) -> Void)? = nil) -> CustomMapView {
+    ///
+    /// Custom event handler for tap gesture to return a coordinate on the map.
+    ///
+    func onTapGesture(perform action: ((_ coordinate: CLLocationCoordinate2D) -> Void)? = nil) -> CustomMapView {
         var new = self
         new.onTap = action
         return new
     }
     
-    func onLongPress(perform action: ((_ coordinate: CLLocationCoordinate2D) -> Void)? = nil) -> CustomMapView {
+    /// Custom event handler for long press gesture to return a coordinate on the map.
+    func onLongPressGesture(perform action: ((_ coordinate: CLLocationCoordinate2D) -> Void)? = nil) -> CustomMapView {
         var new = self
         new.onLongPress = action
         return new
