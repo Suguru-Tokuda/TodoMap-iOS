@@ -16,8 +16,10 @@ struct TodoRowView: View {
             VStack(alignment: .center) {
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("\(todoItemGroup.name) (\(todoItemGroup.items.count))")
+                        Text("\(todoItemGroup.name)")
                             .font(.headline)
+                        Text("\(todoItemGroup.items.count) item\(todoItemGroup.items.count > 1 ? "s" : "")")
+                            .font(.caption)
                         Text("Created: \(todoItemGroup.created.formatted(date: .abbreviated, time: .shortened))")
                             .font(.caption)
                     }

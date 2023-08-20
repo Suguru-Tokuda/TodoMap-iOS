@@ -102,7 +102,6 @@
 			isa = PBXGroup;
 			children = (
 				BB629A932A82AB2700B14D49 /* TodoItemGroupEditView */,
-				BB629A902A82AADA00B14D49 /* TodoItemDetailsView */,
 				BB629A8D2A82AABC00B14D49 /* TodosView */,
 			);
 			path = TodoList;
@@ -130,29 +129,6 @@
 			children = (
 				BB629A942A82AB5400B14D49 /* TodoRowView.swift */,
 				BB629A962A82AB7100B14D49 /* TodoItemGroupListView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		BB629A902A82AADA00B14D49 /* TodoItemDetailsView */ = {
-			isa = PBXGroup;
-			children = (
-				BB629A922A82AAF100B14D49 /* Views */,
-				BB629A912A82AAE900B14D49 /* ViewModels */,
-			);
-			path = TodoItemDetailsView;
-			sourceTree = "<group>";
-		};
-		BB629A912A82AAE900B14D49 /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ViewModels;
-			sourceTree = "<group>";
-		};
-		BB629A922A82AAF100B14D49 /* Views */ = {
-			isa = PBXGroup;
-			children = (
 			);
 			path = Views;
 			sourceTree = "<group>";
