@@ -13,5 +13,7 @@ extension String {
     struct StringConstants {
         let todo = "List"
         let map = "Map"
+        let nearbySearch = "Near you"
+        let autocomplete = "Do you mean?"
     }
 }

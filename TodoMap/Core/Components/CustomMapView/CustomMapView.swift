@@ -10,19 +10,22 @@ import MapKit
 
 struct CustomMapView: UIViewRepresentable, View {
     @Binding var coordinateRegion: MKCoordinateRegion
+    @Binding var annotations: [MKAnnotation]
     @State var customMapView: MKMapView? = nil
     private var onTap: ((_ coordinate: CLLocationCoordinate2D) -> Void)? = nil
     private var onLongPress: ((_ coordinate: CLLocationCoordinate2D) -> Void)? = nil
     var showUserLocation: Bool
     
-    init(coordinateRegion: Binding<MKCoordinateRegion>, showUserLocation: Bool) {
+    init(coordinateRegion: Binding<MKCoordinateRegion>, annotations: Binding<[MKAnnotation]>, showUserLocation: Bool) {
         self._coordinateRegion = coordinateRegion
+        self._annotations = annotations
         self.showUserLocation = showUserLocation
     }
     
     func makeUIView(context: UIViewRepresentableContext<CustomMapView>) -> MKMapView {
         var mapView = MKMapView(frame: .zero)
         mapView.delegate = context.coordinator
+        mapView.addAnnotations(annotations)
         addGestures(context: context, mapView: &mapView)
         
         DispatchQueue.main.async {
@@ -45,7 +48,7 @@ struct CustomMapView: UIViewRepresentable, View {
     }
     
     func makeCoordinator() -> CustomMapView.Coordinator {
-        return Coordinator(self, coordinateRegion: $coordinateRegion, showUserLocation: showUserLocation)
+        return Coordinator(self, coordinateRegion: $coordinateRegion, annotations: $annotations, showUserLocation: showUserLocation)
     }
     
     func updateUIView(_ uiView: MKMapView, context: Context) {
@@ -55,12 +58,14 @@ struct CustomMapView: UIViewRepresentable, View {
     
     class Coordinator: NSObject, MKMapViewDelegate {
         @Binding var coordinateRegion: MKCoordinateRegion
+        @Binding var annotations: [MKAnnotation]
         var showUserLocation: Bool
         var control: CustomMapView
         
-        init(_ control: CustomMapView, coordinateRegion: Binding<MKCoordinateRegion>, showUserLocation: Bool) {
+        init(_ control: CustomMapView, coordinateRegion: Binding<MKCoordinateRegion>, annotations: Binding<[MKAnnotation]>, showUserLocation: Bool) {
             self.control = control
             _coordinateRegion = coordinateRegion
+            _annotations = annotations
             self.showUserLocation = showUserLocation
         }
         

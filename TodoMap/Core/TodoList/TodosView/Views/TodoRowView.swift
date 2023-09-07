@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TodoRowView: View {
-    var todoItemGroup: TodoItemGroupModel
+    var todoItemGroup: TodoItemListModel
     
     var body: some View {
         ZStack(alignment: .leading) {

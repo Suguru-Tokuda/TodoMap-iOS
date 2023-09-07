@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct TodoItemGroupEditView: View, KeyboardReadable {
-    @StateObject var vm: TodoItemGroupEditViewModel
+struct TodoItemListEditView: View, KeyboardReadable {
+    @StateObject var vm: TodoItemListEditViewModel
     @State var keyboardVisible: Bool = false
     
-    init(todoItemGroup: TodoItemGroupModel) {
-        _vm = StateObject(wrappedValue: TodoItemGroupEditViewModel(todoItemGroup: todoItemGroup))
+    init(todoItemGroup: TodoItemListModel) {
+        _vm = StateObject(wrappedValue: TodoItemListEditViewModel(todoItemGroup: todoItemGroup))
     }
     
     var body: some View {
@@ -46,7 +46,7 @@ struct TodoItemGroupEditView: View, KeyboardReadable {
     }
 }
 
-extension TodoItemGroupEditView {
+extension TodoItemListEditView {
     private var footer: some View {
         HStack {
             Button {
@@ -73,8 +73,8 @@ extension TodoItemGroupEditView {
 
 struct TodoItemGroupEditView_Previews: PreviewProvider {
     static var previews: some View {
-        TodoItemGroupEditView(todoItemGroup: dev.todoItemGroup!)
+        TodoItemListEditView(todoItemGroup: dev.todoItemGroup!)
             .preferredColorScheme(.dark)
-        TodoItemGroupEditView(todoItemGroup: dev.todoItemGroup!)
+        TodoItemListEditView(todoItemGroup: dev.todoItemGroup!)
     }
 }

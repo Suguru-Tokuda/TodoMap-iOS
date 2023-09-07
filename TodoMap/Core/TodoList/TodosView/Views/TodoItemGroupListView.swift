@@ -9,9 +9,9 @@ import SwiftUI
 
 struct TodoItemGroupListView: View {
     @StateObject var vm: TodosViewModel
-    @State private var path: [TodoItemGroupModel] = []
+    @State private var path: [TodoItemListModel] = []
     
-    init(todoItemGroups: [TodoItemGroupModel] = []) {
+    init(todoItemGroups: [TodoItemListModel] = []) {
         _vm = StateObject(wrappedValue: TodosViewModel(todoItemGroups: todoItemGroups))
     }
 
@@ -60,7 +60,7 @@ extension TodoItemGroupListView {
                 }
             }
         }
-        .navigationDestination(for: TodoItemGroupModel.self, destination: { item in
+        .navigationDestination(for: TodoItemListModel.self, destination: { item in
             Text(item.name)
         })
         .scrollContentBackground(.hidden)

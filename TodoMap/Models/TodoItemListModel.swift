@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct TodoItemGroupModel: Identifiable, Hashable {
-    var id: Int
+struct TodoItemListModel: Identifiable, Hashable {
+    var id: UUID = UUID()
     var name: String
     var items: [TodoItemModel]
     var location: String
@@ -19,7 +19,7 @@ struct TodoItemGroupModel: Identifiable, Hashable {
         hasher.combine(id)
     }
     
-    static func == (lhs: TodoItemGroupModel, rhs: TodoItemGroupModel) -> Bool {
+    static func == (lhs: TodoItemListModel, rhs: TodoItemListModel) -> Bool {
         lhs.id == rhs.id
     }
 }

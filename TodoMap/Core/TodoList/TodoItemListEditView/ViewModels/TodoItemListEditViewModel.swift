@@ -7,21 +7,12 @@
 
 import Foundation
 
-class TodoItemGroupEditViewModel: ObservableObject {
-    @Published var todoItemGroup: TodoItemGroupModel
+class TodoItemListEditViewModel: ObservableObject {
+    @Published var todoItemGroup: TodoItemListModel
     @Published var focusIndex: Int = -1
     var handlingScrollViewTapped: Bool = false
-//    @Published var name: String = ""
-//    @Published var items: [TodoItemModel] = [
-//        TodoItemModel(
-//            id: UUID(),
-//            name: "",
-//            description: "",
-//            status: .active,
-//            created: Date())
-//    ]
     
-    init(todoItemGroup: TodoItemGroupModel) {
+    init(todoItemGroup: TodoItemListModel) {
         self.todoItemGroup = todoItemGroup
     }
     

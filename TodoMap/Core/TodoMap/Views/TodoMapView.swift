@@ -13,34 +13,17 @@ struct TodoMapView: View {
 
     var body: some View {
         ZStack {
-            CustomMapView(coordinateRegion: $vm.mapRegion, showUserLocation: true)
+            CustomMapView(coordinateRegion: $vm.mapRegion, annotations: $vm.annotations, showUserLocation: true)
                 .onTapGesture { coordinate in
-                    print(coordinate)
                 }
                 .onLongPressGesture { coordinate in
-                    print(coordinate)
                 }
                 .ignoresSafeArea()
                 .onAppear {
                     vm.checkIfLocationServicesIsEnabled()
                 }
-//            Map(coordinateRegion: $vm.mapRegion, interactionModes: .all, showsUserLocation: true)
-//                .ignoresSafeArea()
-//                .onAppear {
-//                    vm.checkIfLocationServicesIsEnabled()
-//                }
-//                .onTapGesture(perform: <#T##(CGPoint) -> Void#>)
-//                .onTapGesture { val in
-//                    print(val)
-//                }
         }
     }
-}
-
-extension TodoMapView {
-//    func logPress() -> some Gesture {
-//        LogPress
-//    }
 }
 
 struct TodoMapView_Previews: PreviewProvider {

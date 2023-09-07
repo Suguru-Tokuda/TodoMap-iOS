@@ -8,9 +8,9 @@
 import Foundation
 
 class TodosViewModel: ObservableObject {
-    @Published var todoItemGroups: [TodoItemGroupModel] = []
+    @Published var todoItemGroups: [TodoItemListModel] = []
     
-    init(todoItemGroups: [TodoItemGroupModel]) {
+    init(todoItemGroups: [TodoItemListModel]) {
         self.todoItemGroups = todoItemGroups
     }
 }

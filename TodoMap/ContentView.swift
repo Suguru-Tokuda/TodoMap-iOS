@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    var todoItemGroup: TodoItemGroupModel
+    var todoItemGroup: TodoItemListModel
     
     init() {
         let todoItems = [
@@ -17,8 +17,8 @@ struct ContentView: View {
             TodoItemModel(id: UUID(), name: "Wiper Fluid", note: "Get the cheapest wiper fluid", completed: false, created: Date()),
             TodoItemModel(id: UUID(), name: "Wiper Fluid", note: "Get the cheapest wiper fluid", completed: true, created: Date())]
         let location = ""
-        todoItemGroup = TodoItemGroupModel(
-            id: 1, name: "Walmart Shopping List",
+        todoItemGroup = TodoItemListModel(
+            id: UUID(), name: "Walmart Shopping List",
             items: todoItems,
             location: location,
             created: Date(),
@@ -28,7 +28,8 @@ struct ContentView: View {
     var body: some View {
 //        TabsView()
 //        TodoItemGroupEditView(todoItemGroup: todoItemGroup)
-        TodoMapView()
+//        TodoMapView()
+        PlacesSearchView()
     }
 }
 
