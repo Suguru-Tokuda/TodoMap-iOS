@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22G90" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="LocationEntity" representedClassName="LocationEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="locationDescription" optional="YES" attributeType="String"/>
+        <attribute name="longitutde" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="locationOrigin" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TodoItemListEntity" inverseName="locationEntity" inverseEntity="TodoItemListEntity"/>
+    </entity>
+    <entity name="TodoItemEntity" representedClassName="TodoItemEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="completed" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="created" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <relationship name="todoItemOrigin" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TodoItemListEntity" inverseName="todoItemEntity" inverseEntity="TodoItemListEntity"/>
+    </entity>
+    <entity name="TodoItemListEntity" representedClassName="TodoItemListEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="created" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="locationEntity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LocationEntity" inverseName="locationOrigin" inverseEntity="LocationEntity"/>
+        <relationship name="todoItemEntity" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TodoItemEntity" inverseName="todoItemOrigin" inverseEntity="TodoItemEntity"/>
+    </entity>
+</model>
