@@ -9,14 +9,14 @@ import SwiftUI
 import MapKit
 
 struct CustomMapView: UIViewRepresentable, View {
-    @Binding var coordinateRegion: MKCoordinateRegion
+    @Binding var coordinateRegion: MKCoordinateRegion?
     @Binding var annotations: [MKAnnotation]
     @State var customMapView: MKMapView? = nil
     private var onTap: ((_ coordinate: CLLocationCoordinate2D) -> Void)? = nil
     private var onLongPress: ((_ coordinate: CLLocationCoordinate2D) -> Void)? = nil
     var showUserLocation: Bool
     
-    init(coordinateRegion: Binding<MKCoordinateRegion>, annotations: Binding<[MKAnnotation]>, showUserLocation: Bool) {
+    init(coordinateRegion: Binding<MKCoordinateRegion?>, annotations: Binding<[MKAnnotation]>, showUserLocation: Bool) {
         self._coordinateRegion = coordinateRegion
         self._annotations = annotations
         self.showUserLocation = showUserLocation
@@ -52,17 +52,20 @@ struct CustomMapView: UIViewRepresentable, View {
     }
     
     func updateUIView(_ uiView: MKMapView, context: Context) {
-        uiView.region = coordinateRegion
+        if let region = coordinateRegion {
+            uiView.region = region
+        }
+        
         uiView.showsUserLocation = showUserLocation
     }
     
     class Coordinator: NSObject, MKMapViewDelegate {
-        @Binding var coordinateRegion: MKCoordinateRegion
+        @Binding var coordinateRegion: MKCoordinateRegion?
         @Binding var annotations: [MKAnnotation]
         var showUserLocation: Bool
         var control: CustomMapView
         
-        init(_ control: CustomMapView, coordinateRegion: Binding<MKCoordinateRegion>, annotations: Binding<[MKAnnotation]>, showUserLocation: Bool) {
+        init(_ control: CustomMapView, coordinateRegion: Binding<MKCoordinateRegion?>, annotations: Binding<[MKAnnotation]>, showUserLocation: Bool) {
             self.control = control
             _coordinateRegion = coordinateRegion
             _annotations = annotations

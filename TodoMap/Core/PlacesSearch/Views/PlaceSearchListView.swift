@@ -24,7 +24,7 @@ struct PlaceSearchListView: View {
                         Spacer()
                     }
                     .padding(.horizontal, 5)
-                    
+
                     ForEach(predictions, id: \.self.id) { prediction in
                         Button {
                             print(prediction)
@@ -34,7 +34,7 @@ struct PlaceSearchListView: View {
                         }
                     }
                 }
-                
+
                 if !nearbySearchResults.isEmpty {
                     HStack {
                         Text(String.constants.nearbySearch)
@@ -44,13 +44,13 @@ struct PlaceSearchListView: View {
                         Spacer()
                     }
                     .padding(.horizontal, 5)
-                    
+
                     ForEach(nearbySearchResults, id: \.self.id) { result in
                         Button {
-                        UIApplication.shared.endEditing()
-                         print(result)
+                            print(result)
+                            UIApplication.shared.endEditing()
                         } label: {
-                            NearBySearchListRowView(result: result, region: $vm.region)
+                            NearBySearchListRowView(result: result, region: vm.region)
                         }
                     }
                 }

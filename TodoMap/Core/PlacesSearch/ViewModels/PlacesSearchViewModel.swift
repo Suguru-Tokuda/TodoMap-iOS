@@ -7,13 +7,14 @@
 
 import Foundation
 import Combine
+import MapKit
 
 class PlaceSearchViewModel : ObservableObject {
     @Published var searchText: String = ""
     @Published var isLoading: Bool = false
     @Published var nearbySearchResults: [NearbySearchResult] = []
     @Published var predictions: [Prediction] = []
-    @Published var region = LocationService.shared.mapRegion
+    @Published var region: MKCoordinateRegion? = LocationService.shared.mapRegion
     var searchRadius: Int = 10_000 // 10km
     var searchTextCancellable: Cancellable? = nil
     
@@ -41,7 +42,9 @@ class PlaceSearchViewModel : ObservableObject {
         Task {
             for await value in LocationService.shared.$mapRegion.values {
                 await MainActor.run(body: {
-                    self.region = value
+                    if let value = value {
+                        self.region = value
+                    }                    
                 })
             }
         }

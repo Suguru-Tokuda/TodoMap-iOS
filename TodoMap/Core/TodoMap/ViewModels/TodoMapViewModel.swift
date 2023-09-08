@@ -8,10 +8,13 @@
 import MapKit
 
 class TodoMapViewModel: ObservableObject {
-    @Published var mapRegion: MKCoordinateRegion = LocationService.shared.mapRegion
+    @Published var mapRegion: MKCoordinateRegion?
     @Published var annotations: [MKAnnotation] = []
     
     init() {
+        if let region = LocationService.shared.mapRegion {
+            self.mapRegion = region
+        }
         addSubscription()
     }
     
@@ -19,14 +22,16 @@ class TodoMapViewModel: ObservableObject {
         Task {
             for await value in LocationService.shared.$mapRegion.values {
                 await MainActor.run(body: {
-                    self.mapRegion = value
+                    if let value = value {
+                        self.mapRegion = value
+                    }
                 })
             }
         }
     }
     
     func checkIfLocationServicesIsEnabled() {
-        Task { [weak self] in
+        Task {
             await LocationService.shared.checkIfLocationServicesIsEnabled()
         }
     }

@@ -10,7 +10,7 @@ import MapKit
 
 struct NearBySearchListRowView: View {
     var result: NearbySearchResult
-    @Binding var region: MKCoordinateRegion
+    var region: MKCoordinateRegion?
     var distanceUnit: DistanceUnit = .mile
     
     var body: some View {
@@ -25,9 +25,11 @@ struct NearBySearchListRowView: View {
                     Text(name)
                         .font(.headline)
                         .foregroundColor(Color.theme.text)
-                    Text("\(distanceUnit.distance(meters: region.getDistance(latitude: location.lat, longitude: location.lng))) \u{2022} \(vicinity)")
-                        .font(.callout)
-                        .foregroundColor(Color.theme.secondaryText)
+                    if let region = region {
+                        Text("\(distanceUnit.distance(meters: region.getDistance(latitude: location.lat, longitude: location.lng))) \u{2022} \(vicinity)")
+                            .font(.callout)
+                            .foregroundColor(Color.theme.secondaryText)
+                    }
                 }
             }
             .padding(.horizontal, 5)
@@ -41,8 +43,8 @@ struct NearBySearchListRowView_Previews: PreviewProvider {
     static var previews: some View {
         @State var region: MKCoordinateRegion = MKCoordinateRegion(center: MapDetails.startingLocation, span: MapDetails.defaultSpan)
         
-        NearBySearchListRowView(result: dev.nearbySearchResults[0], region: $region)
+        NearBySearchListRowView(result: dev.nearbySearchResults[0], region: region)
             .preferredColorScheme(.dark)
-        NearBySearchListRowView(result: dev.nearbySearchResults[0], region: $region)
+        NearBySearchListRowView(result: dev.nearbySearchResults[0], region: region)
     }
 }

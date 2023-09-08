@@ -13,7 +13,9 @@ class MapsService {
     var region: MKCoordinateRegion = MKCoordinateRegion(center: MapDetails.startingLocation, span: MapDetails.defaultSpan)
     
     init() {
-        region = LocationService.shared.mapRegion
+        if let region = LocationService.shared.mapRegion {
+            self.region = region
+        }        
         addSubscription()
     }
     
@@ -21,7 +23,9 @@ class MapsService {
         Task {
             for await value in LocationService.shared.$mapRegion.values {
                 await MainActor.run(body: {
-                    self.region = value
+                    if let value = value {
+                        self.region = value
+                    }
                 })
             }
         }
