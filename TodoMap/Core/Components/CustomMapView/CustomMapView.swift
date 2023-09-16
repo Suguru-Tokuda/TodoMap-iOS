@@ -10,13 +10,15 @@ import MapKit
 
 struct CustomMapView: UIViewRepresentable, View {
     @Binding var coordinateRegion: MKCoordinateRegion?
-    @Binding var annotations: [MKAnnotation]
+    @Binding var annotations: [MKPointAnnotation]
     @State var customMapView: MKMapView? = nil
     private var onTap: ((_ coordinate: CLLocationCoordinate2D) -> Void)? = nil
     private var onLongPress: ((_ coordinate: CLLocationCoordinate2D) -> Void)? = nil
+    private var onAnnotationTap: ((_ annotation: MKPointAnnotation) -> Void)? = nil
     var showUserLocation: Bool
+    @State var animateOnCenter: Bool = false
     
-    init(coordinateRegion: Binding<MKCoordinateRegion?>, annotations: Binding<[MKAnnotation]>, showUserLocation: Bool) {
+    init(coordinateRegion: Binding<MKCoordinateRegion?>, annotations: Binding<[MKPointAnnotation]>, showUserLocation: Bool) {
         self._coordinateRegion = coordinateRegion
         self._annotations = annotations
         self.showUserLocation = showUserLocation
@@ -26,6 +28,9 @@ struct CustomMapView: UIViewRepresentable, View {
         var mapView = MKMapView(frame: .zero)
         mapView.delegate = context.coordinator
         mapView.addAnnotations(annotations)
+        if let region = coordinateRegion {
+            mapView.setRegion(region, animated: false)
+        }
         addGestures(context: context, mapView: &mapView)
         
         DispatchQueue.main.async {
@@ -53,19 +58,25 @@ struct CustomMapView: UIViewRepresentable, View {
     
     func updateUIView(_ uiView: MKMapView, context: Context) {
         if let region = coordinateRegion {
-            uiView.region = region
+            uiView.setRegion(region, animated: animateOnCenter)
+        }
+        
+        if annotations.isEmpty {
+            uiView.removeAnnotations(uiView.annotations)
+        } else {
+            uiView.addAnnotations(annotations)
         }
         
         uiView.showsUserLocation = showUserLocation
     }
-    
+        
     class Coordinator: NSObject, MKMapViewDelegate {
         @Binding var coordinateRegion: MKCoordinateRegion?
-        @Binding var annotations: [MKAnnotation]
+        @Binding var annotations: [MKPointAnnotation]
         var showUserLocation: Bool
         var control: CustomMapView
         
-        init(_ control: CustomMapView, coordinateRegion: Binding<MKCoordinateRegion?>, annotations: Binding<[MKAnnotation]>, showUserLocation: Bool) {
+        init(_ control: CustomMapView, coordinateRegion: Binding<MKCoordinateRegion?>, annotations: Binding<[MKPointAnnotation]>, showUserLocation: Bool) {
             self.control = control
             _coordinateRegion = coordinateRegion
             _annotations = annotations
@@ -74,6 +85,16 @@ struct CustomMapView: UIViewRepresentable, View {
         
         private func getCoordinate(point: CGPoint) -> CLLocationCoordinate2D? {
             return control.customMapView?.convert(point, toCoordinateFrom: control.customMapView)
+        }
+
+        func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+            control.animateOnCenter = true
+        }
+        
+        func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+            if let annotation = view.annotation {
+                mapView.setCenter(annotation.coordinate, animated: true)
+            }
         }
         
         @objc func getCoordinateTapGesture(_ sender: UITapGestureRecognizer) {
