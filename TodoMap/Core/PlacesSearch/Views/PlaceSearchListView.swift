@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct PlaceSearchListView: View {
+    @EnvironmentObject private var vm: PlaceSearchViewModel
     var predictions: [Prediction]
     var nearbySearchResults: [NearbySearchResult]
-    @EnvironmentObject private var vm: PlaceSearchViewModel
+    var onPredictionSelected: ((_ prediction: Prediction) -> ())?
+    var onNearBySearhcResultSelected: ((_ result: NearbySearchResult) -> ())?
     
     var body: some View {
         ScrollView {
@@ -27,7 +29,7 @@ struct PlaceSearchListView: View {
 
                     ForEach(predictions, id: \.self.id) { prediction in
                         Button {
-                            print(prediction)
+                            onPredictionSelected?(prediction)
                             UIApplication.shared.endEditing()
                         } label: {
                             AutoCompleteListRowView(prediction: prediction)
@@ -47,7 +49,7 @@ struct PlaceSearchListView: View {
 
                     ForEach(nearbySearchResults, id: \.self.id) { result in
                         Button {
-                            print(result)
+                            onNearBySearhcResultSelected?(result)
                             UIApplication.shared.endEditing()
                         } label: {
                             NearBySearchListRowView(result: result, region: vm.region)
