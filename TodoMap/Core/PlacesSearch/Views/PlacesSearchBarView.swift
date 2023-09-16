@@ -12,17 +12,25 @@ struct PlacesSearchBarView: View {
     @Binding var isLoading: Bool
     @State private var isEditing = false
     var handleCancelBtnTapped: (() -> ())?
+    var handleBackBtnTapped: (() -> ())?
+    var handleSearchTextFieldFocused: ((_ focused: Bool) -> ())?    
     
     var body: some View {
         HStack {
             HStack {
                 if !isLoading {
-                    Image(systemName: "magnifyingglass")
+                    Image(systemName: "chevron.backward")
                         .foregroundColor(Color.gray)
+                        .onTapGesture {
+                            cancelEditing()
+                            handleBackBtnTapped?()
+                        }
                 } else {
                     ProgressView()
                 }
-                TextField("Search...", text: $text)
+                TextField("Search...", text: $text, onEditingChanged: { editingChanged in
+                    handleSearchTextFieldFocused?(editingChanged)
+                })
                     .padding(7)
                     .onTapGesture {
                         withAnimation(.easeInOut(duration: 0.6)) {
@@ -36,9 +44,7 @@ struct PlacesSearchBarView: View {
             
             if isEditing {
                 Button {
-                    self.isEditing = false
-                    self.text = ""
-                    UIApplication.shared.endEditing()
+                    cancelEditing()
                     handleCancelBtnTapped?()
                 } label: {
                     Text("Cancel")
@@ -51,10 +57,18 @@ struct PlacesSearchBarView: View {
     }
 }
 
+extension PlacesSearchBarView {
+    private func cancelEditing() {
+        self.isEditing = false
+        self.text = ""
+        UIApplication.shared.endEditing()
+    }
+}
+
 struct PlacesSearchBarView_Previews: PreviewProvider {
     static var previews: some View {
         @State var text: String = ""
-        @State var isLoading: Bool = true
+        @State var isLoading: Bool = false
 
         PlacesSearchBarView(text: $text, isLoading: $isLoading)
             .preferredColorScheme(.dark)
