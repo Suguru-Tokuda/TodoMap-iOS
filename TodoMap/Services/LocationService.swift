@@ -15,7 +15,8 @@ enum MapDetails {
 class LocationService: NSObject, CLLocationManagerDelegate {
     static let shared = LocationService()
     var locationManager: CLLocationManager?
-    @Published var mapRegion: MKCoordinateRegion?
+    @Published var center: MKCoordinateRegion?
+    @Published var currentLocation: MKCoordinateRegion?
     
     func checkIfLocationServicesIsEnabled() async {
         if CLLocationManager.locationServicesEnabled() {
@@ -30,7 +31,9 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     public func updateCurrentLocation() {
         guard let locationManager = locationManager else { return }
         if let location = locationManager.location {
-            mapRegion = MKCoordinateRegion(center: location.coordinate, span: MapDetails.defaultSpan)
+            currentLocation = MKCoordinateRegion(center: location.coordinate, span: MapDetails.defaultSpan)
+            
+            if center == nil { center = currentLocation }
         }
     }
     
@@ -56,14 +59,14 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if mapRegion == nil {
-            mapRegion = MKCoordinateRegion(
+        if center == nil {
+            center = MKCoordinateRegion(
                 center: CLLocationCoordinate2D(latitude: (manager.location?.coordinate.latitude)!,
                                                longitude: (manager.location?.coordinate.longitude)!),
                 span: MapDetails.defaultSpan)
         } else {
-            mapRegion!.center.latitude = (manager.location?.coordinate.latitude)!
-            mapRegion!.center.longitude = (manager.location?.coordinate.longitude)!
+            center!.center.latitude = (manager.location?.coordinate.latitude)!
+            center!.center.longitude = (manager.location?.coordinate.longitude)!
         }
     }
 }
