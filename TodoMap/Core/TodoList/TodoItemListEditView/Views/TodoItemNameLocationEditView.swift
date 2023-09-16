@@ -10,6 +10,7 @@ import SwiftUI
 struct TodoItemNameLocationEditView: View {
     @Binding var name: String
     @Binding var location: String
+    @State private var showLocationSearchSheet = false
     
     var body: some View {
         ZStack {
@@ -18,13 +19,36 @@ struct TodoItemNameLocationEditView: View {
                 TextField("Name", text: $name)
                     .font(.system(size: 33))
                     .fontWeight(.bold)
-                TextField("Location", text: $location)
-                    .font(.system(size: 25))
-                    .fontWeight(.semibold)
-                    .foregroundColor(Color.theme.secondaryText)
+                HStack {
+                    TextField("Location", text: $location)
+                        .font(.system(size: 25))
+                        .fontWeight(.semibold)
+                        .foregroundColor(Color.theme.secondaryText)
+                    mapBtn
+                        .sheet(isPresented: $showLocationSearchSheet) {
+                            LocationSearchSheetView()
+                        }
+                }
             }
         }
         .frame(height: 100)
+    }
+}
+
+extension TodoItemNameLocationEditView {
+    var mapBtn: some View {
+        Button {
+            showLocationSearchSheet = true
+        } label: {
+            ZStack {
+                Circle()
+                    .fill(Color.theme.secondaryBackground)
+                    .frame(width: 20, height: 20)
+                Image(systemName: "map")
+                    .foregroundColor(Color.theme.secondaryText)
+                    .frame(width: 20, height: 20)
+            }
+        }
     }
 }
 
