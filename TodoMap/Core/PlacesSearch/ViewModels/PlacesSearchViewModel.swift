@@ -14,7 +14,7 @@ class PlaceSearchViewModel : ObservableObject {
     @Published var isLoading: Bool = false
     @Published var nearbySearchResults: [NearbySearchResult] = []
     @Published var predictions: [Prediction] = []
-    @Published var region: MKCoordinateRegion? = LocationService.shared.mapRegion
+    @Published var region: MKCoordinateRegion? = LocationService.shared.center
     var searchRadius: Int = 10_000 // 10km
     var searchTextCancellable: Cancellable? = nil
     
@@ -40,7 +40,7 @@ class PlaceSearchViewModel : ObservableObject {
         }
         
         Task {
-            for await value in LocationService.shared.$mapRegion.values {
+            for await value in LocationService.shared.$center.values {
                 await MainActor.run(body: {
                     if let value = value {
                         self.region = value
