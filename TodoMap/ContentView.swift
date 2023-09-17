@@ -11,25 +11,27 @@ struct ContentView: View {
     var todoItemGroup: TodoItemListModel
     
     init() {
-        let todoItems = [
-            TodoItemModel(id: UUID(), name: "Wiper Fluid", note: "Get the cheapest wiper fluid", completed: false, created: Date()),
-            TodoItemModel(id: UUID(), name: "Kefer", note: "Plain Kefier", completed: true, created: Date()),
-            TodoItemModel(id: UUID(), name: "Wiper Fluid", note: "Get the cheapest wiper fluid", completed: false, created: Date()),
-            TodoItemModel(id: UUID(), name: "Wiper Fluid", note: "Get the cheapest wiper fluid", completed: true, created: Date())]
+//        let todoItems = [
+//            TodoItemModel(id: UUID(), name: "Wiper Fluid", note: "Get the cheapest wiper fluid", completed: false, created: Date()),
+//            TodoItemModel(id: UUID(), name: "Kefer", note: "Plain Kefier", completed: true, created: Date()),
+//            TodoItemModel(id: UUID(), name: "Wiper Fluid", note: "Get the cheapest wiper fluid", completed: false, created: Date()),
+//            TodoItemModel(id: UUID(), name: "Wiper Fluid", note: "Get the cheapest wiper fluid", completed: true, created: Date())]
         let location = ""
         todoItemGroup = TodoItemListModel(
-            id: UUID(), name: "Walmart Shopping List",
-            items: todoItems,
+            id: UUID(),
+            name: "",
+            items: [],
             location: location,
             created: Date(),
-            status: .active)
+            status: .active
+        )
     }
     
     var body: some View {
 //        TabsView()
-//        TodoItemListEditView(todoItemGroup: todoItemGroup)
+        TodoItemListEditView(todoItemGroup: todoItemGroup)
 //        TodoMapView()
-        PlacesSearchView()
+//        PlacesSearchView()
     }
 }
 

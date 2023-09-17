@@ -7,8 +7,8 @@
 
 import Foundation
 
-enum Status {
-    case active
-    case completed
-    case inactive
+enum Status: Int64 {
+    case active = 1
+    case completed = 2
+    case inactive = 3
 }

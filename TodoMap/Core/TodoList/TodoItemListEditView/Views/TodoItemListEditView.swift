@@ -42,7 +42,7 @@ struct TodoItemListEditView: View, KeyboardReadable {
                 vm.handleScrollViewTapped(keyboardVisible)
             }
             keyboardVisible = newIsKeyboardVisible
-        })        
+        })
     }
 }
 

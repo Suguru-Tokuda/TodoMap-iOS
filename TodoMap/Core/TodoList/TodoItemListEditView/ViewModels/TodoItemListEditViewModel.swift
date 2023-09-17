@@ -62,7 +62,7 @@ class TodoItemListEditViewModel: ObservableObject {
         $todoItemList
             .receive(on: DispatchQueue.main)
             .sink { value in
-                print(value)
+                TodoItemService.shared.mergeTodoItemListEntity(list: value)
             }
             .store(in: &cancellables)
     }

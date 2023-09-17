@@ -22,4 +22,16 @@ struct TodoItemListModel: Identifiable, Hashable {
     static func == (lhs: TodoItemListModel, rhs: TodoItemListModel) -> Bool {
         lhs.id == rhs.id
     }
+    
+    static func parseTodoItemListEntity(entity: TodoItemListEntity) -> TodoItemListModel {
+        var retVal = TodoItemListModel(
+            name: entity.name ?? "",
+            items: [],
+            location: "",
+            created: entity.created ?? Date(),
+            status: Status(rawValue: entity.status) ?? Status.active
+        )
+        retVal.id = entity.id ?? UUID()
+        return retVal
+    }
 }

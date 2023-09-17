@@ -42,9 +42,7 @@ class TodoMapViewModel: ObservableObject {
         $locationSelectionSheeetPresented
             .receive(on: DispatchQueue.main)
             .sink { value in
-                print(value)
                 if !value { self.annotations = [] }
-                print(self.annotations.count)
             }
             .store(in: &cancellables)
     }
@@ -71,7 +69,5 @@ class TodoMapViewModel: ObservableObject {
     func addAnnotation(annotation: MKPointAnnotation, reset: Bool = false) {
         if reset { self.annotations = [annotation] }
         else { self.annotations.append(annotation) }
-        
-        print(self.annotations.count)
     }
 }
