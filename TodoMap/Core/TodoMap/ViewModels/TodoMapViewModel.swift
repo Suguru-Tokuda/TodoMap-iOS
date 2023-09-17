@@ -13,7 +13,7 @@ class TodoMapViewModel: ObservableObject {
     @Published var annotations: [MKPointAnnotation] = []
     @Published var locationSelectionSheeetPresented: Bool = false
     @Published var location: ReverseGeocodeModel?
-    var presentSheetCancellable: Cancellable?
+    var cancellables: Set<AnyCancellable> = []
     
     init() {
         if let region = LocationService.shared.center {
@@ -22,26 +22,31 @@ class TodoMapViewModel: ObservableObject {
         addSubscription()
     }
     
+    deinit {
+        cancellables.forEach { cancellable in cancellable.cancel() }
+    }
+    
     private func addSubscription() {
-        Task {
-            for await value in LocationService.shared.$center.values {
-                await MainActor.run(body: {
-                    if let value = value {
-                        self.mapRegion = value
-                    }
-                })
-            }
-        }
-        
-        Task {
-            presentSheetCancellable = self.$locationSelectionSheeetPresented
-                .receive(on: DispatchQueue.main)
-                .sink { value in
-                    print(value)
-                    if !value { self.annotations = [] }
-                    print(self.annotations.count)
+        LocationService.shared.$center
+            .receive(on: DispatchQueue.main)
+            .sink { value in
+                Task {
+                    await MainActor.run(body: {
+                        if let value = value {
+                            self.mapRegion = value
+                        }
+                    })
                 }
-        }
+            }
+            .store(in: &cancellables)
+        $locationSelectionSheeetPresented
+            .receive(on: DispatchQueue.main)
+            .sink { value in
+                print(value)
+                if !value { self.annotations = [] }
+                print(self.annotations.count)
+            }
+            .store(in: &cancellables)
     }
     
     func checkIfLocationServicesIsEnabled() {

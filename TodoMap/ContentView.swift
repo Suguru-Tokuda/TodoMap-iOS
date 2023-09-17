@@ -27,7 +27,7 @@ struct ContentView: View {
     
     var body: some View {
 //        TabsView()
-//        TodoItemGroupEditView(todoItemGroup: todoItemGroup)
+//        TodoItemListEditView(todoItemGroup: todoItemGroup)
 //        TodoMapView()
         PlacesSearchView()
     }

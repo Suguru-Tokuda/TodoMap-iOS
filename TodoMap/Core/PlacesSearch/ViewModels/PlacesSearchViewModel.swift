@@ -16,38 +16,48 @@ class PlaceSearchViewModel : ObservableObject {
     @Published var predictions: [Prediction] = []
     @Published var region: MKCoordinateRegion? = LocationService.shared.center
     var searchRadius: Int = 10_000 // 10km
-    var searchTextCancellable: Cancellable? = nil
+    var cancellables: Set<AnyCancellable> = []
     
     init() {
         addSubscriptions()
     }
     
+    deinit {
+        cancellables.forEach { cancellable in cancellable.cancel() }
+    }
+    
     func addSubscriptions() {
         // listen to search text
-        Task {
-            for await value in $searchText
-                .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
-                .values {
-                if !value.isEmpty {
-                    try await self.getSearchResults(query: value)
-                } else {
-                    DispatchQueue.main.async {
-                        self.predictions = []
-                        self.nearbySearchResults = []
+        $searchText
+            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
+            .receive(on: DispatchQueue.main)
+            .sink { value in
+                Task {
+                    if !value.isEmpty {
+                        try await self.getSearchResults(query: value)
+                    } else {
+                        DispatchQueue.main.async {
+                            self.predictions = []
+                            self.nearbySearchResults = []
+                        }
                     }
                 }
             }
-        }
+            .store(in: &cancellables)
         
-        Task {
-            for await value in LocationService.shared.$center.values {
-                await MainActor.run(body: {
-                    if let value = value {
-                        self.region = value
-                    }                    
-                })
+        // listen to location center change
+        LocationService.shared.$center
+            .receive(on: DispatchQueue.main)
+            .sink { value in
+                Task {
+                    await MainActor.run(body: {
+                        if let value = value {
+                            self.region = value
+                        }
+                    })
+                }
             }
-        }
+            .store(in: &cancellables)
     }
     
     func getSearchResults(query: String) async throws {

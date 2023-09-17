@@ -6,25 +6,34 @@
 //
 
 import Foundation
+import Combine
 
 class TodoItemListEditViewModel: ObservableObject {
-    @Published var todoItemGroup: TodoItemListModel
+    @Published var todoItemList: TodoItemListModel
     @Published var focusIndex: Int = -1
     var handlingScrollViewTapped: Bool = false
+    var cancellables: Set<AnyCancellable> = []
     
     init(todoItemGroup: TodoItemListModel) {
-        self.todoItemGroup = todoItemGroup
+        self.todoItemList = todoItemGroup
+        self.addSubscriptions()
+    }
+    
+    deinit {
+        self.cancellables.forEach { cancllable in
+            cancllable.cancel()
+        }
     }
     
     // MARK: public functions
     func addTodoItem() {
-        self.todoItemGroup.items.append(TodoItemModel(id: UUID(), name: "", note: "", completed: false, created: Date()))
-        self.focusIndex = todoItemGroup.items.count - 1
+        self.todoItemList.items.append(TodoItemModel(id: UUID(), name: "", note: "", completed: false, created: Date()))
+        self.focusIndex = todoItemList.items.count - 1
     }
     
     func isLastItemEmpty() -> Bool {
-        if !todoItemGroup.items.isEmpty {
-            if let lastItem = todoItemGroup.items.last {
+        if !todoItemList.items.isEmpty {
+            if let lastItem = todoItemList.items.last {
                 return lastItem.name.isEmpty
             } else {
                 return false
@@ -40,7 +49,7 @@ class TodoItemListEditViewModel: ObservableObject {
         if !handlingScrollViewTapped && isLastItemEmpty() {
             handlingScrollViewTapped = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.todoItemGroup.items.removeLast()
+                self.todoItemList.items.removeLast()
                 self.handlingScrollViewTapped = false
             }
         } else if !keyboardVisible && !isLastItemEmpty() {
@@ -49,6 +58,15 @@ class TodoItemListEditViewModel: ObservableObject {
     }
 
     // MARK: Private functions
+    private func addSubscriptions() {
+        $todoItemList
+            .receive(on: DispatchQueue.main)
+            .sink { value in
+                print(value)
+            }
+            .store(in: &cancellables)
+    }
+    
     private func resetFocusIndex() {
         focusIndex = -1
     }

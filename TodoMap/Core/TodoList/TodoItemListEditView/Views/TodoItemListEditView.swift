@@ -20,11 +20,11 @@ struct TodoItemListEditView: View, KeyboardReadable {
             Color.theme.background
             VStack {
                 TodoItemNameLocationEditView(
-                    name: $vm.todoItemGroup.name,
-                    location: $vm.todoItemGroup.location
+                    name: $vm.todoItemList.name,
+                    location: $vm.todoItemList.location
                 )
                 TodoItemsEditView(
-                    todoItems: $vm.todoItemGroup.items,
+                    todoItems: $vm.todoItemList.items,
                     focusIndex: $vm.focusIndex
                 )
                     .onTapGesture {
