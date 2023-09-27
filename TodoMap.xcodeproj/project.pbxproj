@@ -63,6 +63,7 @@
 		BBD948D52A91AA1700777393 /* TodoMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD948D42A91AA1700777393 /* TodoMapView.swift */; };
 		BBD948D72A91AA2500777393 /* TodoMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD948D62A91AA2500777393 /* TodoMapViewModel.swift */; };
 		BBD948DA2A91C1DE00777393 /* CustomMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD948D92A91C1DE00777393 /* CustomMapView.swift */; };
+		BBF1ABFF2ABBF5D500F6B117 /* Spacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF1ABFE2ABBF5D500F6B117 /* Spacer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -123,6 +124,7 @@
 		BBD948D42A91AA1700777393 /* TodoMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoMapView.swift; sourceTree = "<group>"; };
 		BBD948D62A91AA2500777393 /* TodoMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoMapViewModel.swift; sourceTree = "<group>"; };
 		BBD948D92A91C1DE00777393 /* CustomMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMapView.swift; sourceTree = "<group>"; };
+		BBF1ABFE2ABBF5D500F6B117 /* Spacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -324,6 +326,7 @@
 				BBA4F3D02A7F1C0F00DF4148 /* String.swift */,
 				BB42E1BA2A901677001D2F05 /* UIApplication.swift */,
 				BB629AA62A82C90A00B14D49 /* View.swift */,
+				BBF1ABFE2ABBF5D500F6B117 /* Spacer.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -525,6 +528,7 @@
 				BB629AA12A82AE3C00B14D49 /* PreviewProvider.swift in Sources */,
 				BBCA8D3E2AA41FB200D302B7 /* GoogleNearbySearchModel.swift in Sources */,
 				BB629A9A2A82ABB200B14D49 /* TodosViewModel.swift in Sources */,
+				BBF1ABFF2ABBF5D500F6B117 /* Spacer.swift in Sources */,
 				BB629AA32A82B9B100B14D49 /* TodoItemListModel.swift in Sources */,
 				BB77671E2A94588900E2A6BC /* PlacesSearchBarView.swift in Sources */,
 				BB7767232A9458CA00E2A6BC /* AutoCompleteListRowView.swift in Sources */,
