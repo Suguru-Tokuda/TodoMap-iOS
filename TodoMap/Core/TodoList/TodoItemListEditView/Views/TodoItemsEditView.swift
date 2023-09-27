@@ -12,17 +12,23 @@ struct TodoItemsEditView: View{
     @Binding var focusIndex: Int
     
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                ForEach(0..<todoItems.count, id: \.self) { i in
-                    if i < todoItems.count {
-                        TodoItemEditView(
-                            todoItem: $todoItems[i],
-                            index: i,
-                            focusIndex: $focusIndex
-                        ) { val in
-                            handleValueChanged(value: val, index: i)
-                        }
+        ForEach(0..<todoItems.count, id: \.self) { i in
+            if i < todoItems.count {
+                TodoItemEditView(
+                    todoItem: $todoItems[i],
+                    index: i,
+                    focusIndex: $focusIndex
+                ) { val in
+                    handleValueChanged(value: val, index: i)
+                }
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.theme.background)
+                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                    Button(role: .destructive) {
+                        print("button tapped")
+                    } label: {
+                        Text("Delete")
                     }
                 }
             }
