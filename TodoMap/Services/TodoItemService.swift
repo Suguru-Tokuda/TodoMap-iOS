@@ -15,7 +15,7 @@ class TodoItemService {
     let locationEntityName = "LocationEntity"
     @Published var savedTodoItemGrouops: [TodoItemListEntity] = []
     /*
-        Used to track TodoItemListEntity to achieve O(1) access
+     Used to track TodoItemListEntity to achieve O(1) access
      */
     var todoItemListDict: [UUID : TodoItemListEntity] = [:]
     
@@ -62,21 +62,45 @@ class TodoItemService {
         if let item = todoItemListDict[id] {
             return item
         }
-    
+        
         let request = NSFetchRequest<TodoItemListEntity>(entityName: todoListEntityName)
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         
         do {
             let resultSet = try container.viewContext.fetch(request)
-            if !resultSet.isEmpty {
-                return resultSet[0]
-            } else {
-                return nil
-            }
+            return !resultSet.isEmpty ? resultSet[0] : nil
         } catch let error {
             print("Error fetching todo list entity. \(error)")
         }
         
+        return nil
+    }
+    
+    func getTodoListItemEntities(list: TodoItemListEntity) -> [TodoItemEntity] {
+        let request = NSFetchRequest<TodoItemEntity>(entityName: todoItemEntityName)
+        request.predicate = NSPredicate(format: "todoItemOrigin = %@", list)
+        
+        do {
+            let resultSet = try container.viewContext.fetch(request)
+            return resultSet
+        } catch let error {
+            print("Error fetching todo list item entities. \(error)")
+        }
+        
+        return []
+    }
+    
+    func getTodoListItem(id: UUID) -> TodoItemEntity? {
+        let request = NSFetchRequest<TodoItemEntity>(entityName: todoItemEntityName)
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        
+        do {
+            let resultSet = try container.viewContext.fetch(request)
+            return !resultSet.isEmpty ? resultSet[0] : nil
+        } catch let error {
+            print("Error fetching todo list item entity. \(error)")
+        }
+
         return nil
     }
     
@@ -86,16 +110,44 @@ class TodoItemService {
      */
     func mergeTodoItemListEntity(list: TodoItemListModel) {
         // find an existing eitnty first to avoid duplicate entities.
-        var itemToSave: TodoItemListEntity? = getTodoListEntity(id: list.id)
-        if itemToSave == nil { itemToSave = TodoItemListEntity(context: container.viewContext) }
+        var listToSave: TodoItemListEntity? = getTodoListEntity(id: list.id)
+        if listToSave == nil { listToSave = TodoItemListEntity(context: container.viewContext) }
         
-        if let itemToSave = itemToSave {
-            itemToSave.id = list.id
-            itemToSave.created = list.created
-            itemToSave.name = list.name
-            itemToSave.status = list.status.rawValue
+        if let listToSave = listToSave {
+            listToSave.id = list.id
+            listToSave.created = list.created
+            listToSave.name = list.name
+            listToSave.status = list.status.rawValue
+            
+            if !list.name.isEmpty {
+                list.items.forEach { item in
+                    if !item.name.isEmpty {
+                        var createNew = false
+                        var todoItemEntity = getTodoListItem(id: item.id)
+
+                        if todoItemEntity == nil {
+                            createNew = true
+                            todoItemEntity = TodoItemEntity(context: container.viewContext)
+                        }
+                        
+                        if todoItemEntity != nil {
+                            todoItemEntity!.id = item.id
+                            todoItemEntity!.name = item.name
+                            todoItemEntity!.note = item.note
+                            todoItemEntity!.created = item.created
+                            todoItemEntity!.completed = item.completed
+                            todoItemEntity!.todoItemOrigin = listToSave
+                        }
+                        
+                        if createNew {
+                            listToSave.addToTodoItemEntity(todoItemEntity!)
+                        }
+                    }
+                }
+            }
+            
             applyChanges()
-            todoItemListDict[list.id] = itemToSave
+            todoItemListDict[list.id] = listToSave
         }
     }
     
@@ -115,6 +167,18 @@ class TodoItemService {
         }
         
         todoItemListDict.removeValue(forKey: id)
+    }
+    
+    func deleteTodoItemEntity(id: UUID, entity: TodoItemEntity?) {
+        if entity != nil {
+            container.viewContext.delete(entity!)
+            applyChanges()
+        } else {
+            if let existingEntity = getTodoListItem(id: id) {
+                container.viewContext.delete(existingEntity)
+                applyChanges()
+            }
+        }
     }
     
     private func save() {
