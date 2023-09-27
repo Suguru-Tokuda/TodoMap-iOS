@@ -18,21 +18,42 @@ struct TodoItemListEditView: View, KeyboardReadable {
     var body: some View {
         ZStack {
             Color.theme.background
+                .ignoresSafeArea()
+
             VStack {
-                TodoItemNameLocationEditView(
-                    name: $vm.todoItemList.name,
-                    location: $vm.todoItemList.location
-                )
-                TodoItemsEditView(
-                    todoItems: $vm.todoItemList.items,
-                    focusIndex: $vm.focusIndex
-                )
-                    .onTapGesture {
-                        vm.handleScrollViewTapped(keyboardVisible)
+                ZStack {
+                    List {
+                        TodoItemNameLocationEditView(
+                            name: $vm.todoItemList.name,
+                            location: $vm.todoItemList.location
+                        )
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.theme.background)
+                        TodoItemsEditView(
+                            todoItems: $vm.todoItemList.items,
+                            focusIndex: $vm.focusIndex
+                        )
+                        .overlay(Group {
+                            if vm.todoItemList.items.isEmpty {
+                                Color.theme.background.ignoresSafeArea()
+                            }
+                        })
                     }
+                    .scrollContentBackground(.hidden)
+                    .listStyle(PlainListStyle())
+                    Rectangle()
+                        .fill(Color.theme.background)
+                        .opacity(0.00001)
+                        .padding(.trailing, 0)
+                        .padding(.top, CGFloat(vm.todoItemList.items.count) * CGFloat(50) + CGFloat(100))
+                        .onTapGesture {
+                            vm.handleScrollViewTapped(keyboardVisible)
+                        }
+                }
                 Spacer()
-                if !vm.isLastItemEmpty() && !keyboardVisible {
-                    footer                        
+                if ((vm.todoItemList.items.isEmpty || !vm.isLastItemEmpty()) && !keyboardVisible) {
+                    footer
                 }
             }
             .padding(10)
