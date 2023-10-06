@@ -10,6 +10,7 @@ import SwiftUI
 struct TodoItemsEditView: View{
     @Binding var todoItems: [TodoItemModel]
     @Binding var focusIndex: Int
+    @EnvironmentObject var vm: TodoItemListEditViewModel
     
     var body: some View {
         ForEach(0..<todoItems.count, id: \.self) { i in
@@ -26,7 +27,7 @@ struct TodoItemsEditView: View{
                 .listRowBackground(Color.theme.background)
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     Button(role: .destructive) {
-                        print("button tapped")
+                        vm.deleteTodoItem(id: todoItems[i].id)
                     } label: {
                         Text("Delete")
                     }
@@ -52,6 +53,9 @@ struct TodoItemsEditView_Previews: PreviewProvider {
     static var previews: some View {
         TodoItemsEditView(todoItems: $todoItems, focusIndex: $focusIndex)
             .preferredColorScheme(.dark)
+            .environmentObject(TodoItemListEditViewModel(todoItemGroup: dev.todoItemGroup!))
         TodoItemsEditView(todoItems: $todoItems, focusIndex: $focusIndex)
+            .environmentObject(TodoItemListEditViewModel(todoItemGroup: dev.todoItemGroup!))
+
     }
 }
