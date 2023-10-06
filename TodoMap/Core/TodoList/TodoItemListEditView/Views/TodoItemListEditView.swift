@@ -39,6 +39,7 @@ struct TodoItemListEditView: View, KeyboardReadable {
                                 Color.theme.background.ignoresSafeArea()
                             }
                         })
+                        .environmentObject(vm)
                     }
                     .scrollContentBackground(.hidden)
                     .listStyle(PlainListStyle())
@@ -64,6 +65,23 @@ struct TodoItemListEditView: View, KeyboardReadable {
             }
             keyboardVisible = newIsKeyboardVisible
         })
+//        .onAppear {
+//            Task {
+//                let list = TodoItemService.shared.getTodoLists()
+//                list.forEach { el in
+//                    if let items = el.todoItemEntity {
+//                        let arr = items as! Set<TodoItemEntity>
+//                        
+//                        arr.forEach { item in
+//                            if let name = item.name {
+//                                print(name)
+//                            }
+//                        }
+//                    }
+//                }
+//                print(list.count)
+//            }
+//        }
     }
 }
 
