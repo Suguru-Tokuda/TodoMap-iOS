@@ -169,7 +169,7 @@ class TodoItemService {
         todoItemListDict.removeValue(forKey: id)
     }
     
-    func deleteTodoItemEntity(id: UUID, entity: TodoItemEntity?) {
+    func deleteTodoItemEntity(id: UUID, entity: TodoItemEntity? = nil) {
         if entity != nil {
             container.viewContext.delete(entity!)
             applyChanges()
