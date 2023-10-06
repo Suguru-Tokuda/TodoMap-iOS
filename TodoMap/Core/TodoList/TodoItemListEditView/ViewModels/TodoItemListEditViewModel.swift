@@ -31,6 +31,13 @@ class TodoItemListEditViewModel: ObservableObject {
         self.focusIndex = todoItemList.items.count - 1
     }
     
+    func deleteTodoItem(id: UUID) {
+        if let index = todoItemList.items.firstIndex(where: { $0.id == id }) {
+            TodoItemService.shared.deleteTodoItemEntity(id: id)
+            todoItemList.items.remove(at: index)
+        }        
+    }
+    
     func isLastItemEmpty() -> Bool {
         if !todoItemList.items.isEmpty {
             if let lastItem = todoItemList.items.last {
