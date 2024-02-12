@@ -27,7 +27,10 @@ struct TodoItemsEditView: View{
                 .listRowBackground(Color.theme.background)
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     Button(role: .destructive) {
-                        vm.deleteTodoItem(id: todoItems[i].id)
+                        Task {
+                            let id = todoItems[i].id
+                            await vm.deleteTodoItem(id: id)
+                        }
                     } label: {
                         Text("Delete")
                     }

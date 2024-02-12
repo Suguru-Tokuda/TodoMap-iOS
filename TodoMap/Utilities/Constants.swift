@@ -9,4 +9,6 @@ import Foundation
 
 struct Constants {
     static let googleAPIBaseURL = "https://maps.googleapis.com/"
+    static let googleMapsBaseURL = "\(googleAPIBaseURL)maps/api/place/"
+    static let googleGeocodeBaseURL = "\(googleAPIBaseURL)maps/api/geocode/"
 }

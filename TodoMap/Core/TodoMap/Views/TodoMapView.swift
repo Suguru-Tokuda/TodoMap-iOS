@@ -10,6 +10,7 @@ import MapKit
 
 struct TodoMapView: View {
     @StateObject private var vm: TodoMapViewModel = TodoMapViewModel()
+    @EnvironmentObject var locationManager: LocationManager
 
     var body: some View {
         ZStack {
@@ -22,30 +23,11 @@ struct TodoMapView: View {
                 }
                 .onLongPressGesture { coordinate in
                     Task {
-                        do {
-                            try await vm.getLocationDetails(coordinate: coordinate)
-                            let annotation = MKPointAnnotation()
-                            annotation.coordinate = coordinate
-                            
-                            if let location = vm.location,
-                               location.results.count > 0
-                            {
-                                let result = location.results[0]
-                                annotation.title = result.formattedAddress
-                                annotation.accessibilityValue = result.placeId
-                            }
-                            
-                            LocationService.shared.center = MKCoordinateRegion(center: coordinate, span: MapDetails.defaultSpan)
-                            vm.addAnnotation(annotation: annotation, reset: true)
-                        } catch {
-                            // TODO: show an error alert
-                        }
+                        await vm.getLocationDetails(coordinate: coordinate)
+                        vm.handleNewCoordinate(coordinate: coordinate)
                     }
                 }
                 .ignoresSafeArea()
-                .onAppear {
-                    vm.checkIfLocationServicesIsEnabled()
-                }
                 .sheet(isPresented: $vm.locationSelectionSheeetPresented) {
                     if let location = vm.location {
                         PlaceSelectionView(location: location) { (location, locationName) in
@@ -53,6 +35,9 @@ struct TodoMapView: View {
                             print(locationName)
                         }
                     }
+                }
+                .onAppear {
+                    vm.setLocationManager(locationManager: locationManager)
                 }
         }
     }

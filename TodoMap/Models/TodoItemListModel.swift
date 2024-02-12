@@ -31,7 +31,24 @@ struct TodoItemListModel: Identifiable, Hashable {
             created: entity.created ?? Date(),
             status: Status(rawValue: entity.status) ?? Status.active
         )
+        
         retVal.id = entity.id ?? UUID()
+        
+        if let items = entity.todoItemEntity,
+           let itemSet = items as? Set<TodoItemEntity> {
+            itemSet.forEach { item in
+                if let id = item.id,
+                   let name = item.name,
+                   let created = item.created {
+                    retVal.items.append(TodoItemModel(id: id,
+                                                      name: name,
+                                                      note: item.note ?? "",
+                                                      completed: item.completed,
+                                                      created: created))
+                }
+            }
+        }
+        
         return retVal
     }
 }

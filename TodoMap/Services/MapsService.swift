@@ -6,47 +6,59 @@
 //
 
 import MapKit
+import Combine
 
-class MapsService {
-    static let shared = MapsService()
-    let googleMapsBaseURL = "\(Constants.googleAPIBaseURL)maps/api/place/"
-    let googleGeocodeBaseURL = "\(Constants.googleAPIBaseURL)maps/api/geocode/"
-    var region: MKCoordinateRegion = MKCoordinateRegion(center: MapDetails.startingLocation, span: MapDetails.defaultSpan)
-    
-    init() {
-        if let region = LocationService.shared.center {
-            self.region = region
-        }        
-        addSubscription()
+protocol MapServiceURL {
+    func getNearBySearchResultsURLStr(query: String, coordinate: CLLocationCoordinate2D, radius: Int, type: GooglePlaceType?) -> String
+    func getAutoCompletePlacesURLStr(query: String, coordinate: CLLocationCoordinate2D, radius: Int, type: GooglePlaceType?) -> String
+}
+
+extension MapServiceURL {
+    func getNearBySearchResultsURLStr(query: String, coordinate: CLLocationCoordinate2D, radius: Int, type: GooglePlaceType? = nil) -> String {
+        return "\(Constants.googleMapsBaseURL)\(GooglePlacesAPIEndpoints.nearBySearch.rawValue)/json?" +
+               "keyword=\(query)" +
+               "&location=\(coordinate.latitude)%\(coordinate.longitude)" +
+               "&radius=\(radius)" +
+               "\(type != nil ? "&type=\(String(describing: type!.rawValue))" : "")" +
+               "&key=\(Keys.googleAPIKey)"
+            
     }
     
-    private func addSubscription() {
-        Task {
-            for await value in LocationService.shared.$center.values {
-                await MainActor.run(body: {
-                    if let value = value {
-                        self.region = value
-                    }
-                })
-            }
-        }
+    func getAutoCompletePlacesURLStr(query: String, coordinate: CLLocationCoordinate2D, radius: Int, type: GooglePlaceType?) -> String {
+        return "\(Constants.googleMapsBaseURL)\(GooglePlacesAPIEndpoints.autoComplete.rawValue)/json?" +
+               "input=\(query)" +
+               "&location=\(coordinate.latitude)%\(coordinate.longitude)" +
+               "&radius=\(radius)" +
+               "\(type != nil ? "&type=\(String(describing: type!.rawValue))" : "")" +
+               "&key=\(Keys.googleAPIKey)"
     }
+}
+
+class MapsService: MapServiceURL {
+    var region: MKCoordinateRegion?
+    let networkManager: Networking
+    var locationManager: LocationManager?
+    var cancellables = Set<AnyCancellable>()
+    var locationCancellable: AnyCancellable?
     
+    init(networkManager: Networking = NetworkManager()) {
+        self.networkManager = networkManager
+    }
+
     func getNearbySearchResults(query: String, radius: Int, type: GooglePlaceType? = nil) async throws -> GoogleNearbySearchModel? {
         do {
-            let coordinate = region.center
-            let urlStr = "\(googleMapsBaseURL)nearbysearch/json?keyword=\(query)&location=\(coordinate.latitude),\(coordinate.longitude)&radius=\(radius)\(type != nil ? "&type=\(String(describing: type!.rawValue))" : "")&key=\(Keys.googleAPIKey)"
+            if let coordinate = locationManager?.center?.center {
+                let urlStr = getNearBySearchResultsURLStr(query: query, coordinate: coordinate, radius: radius, type: type)
 
-            guard let url = URL(string: urlStr) else { return nil }
-            if let data = try? await NetworkingManager.get(url: url) {
-                var retVal = try JSONDecoder().decode(GoogleNearbySearchModel.self, from: data)
+                guard let url = URL(string: urlStr) else { return nil }
+                var retVal = try await networkManager.get(url: url, type: GoogleNearbySearchModel.self)
                 
                 if var results = retVal.results {
                     for i in 0..<results.count {
                         let result = results[i]
                         if let geometry = result.geometry,
                            let location = geometry.location {
-                            results[i].distanceInMeter = self.region.getDistance(latitude: location.lat, longitude: location.lng)
+                            results[i].distanceInMeter = region?.getDistance(latitude: location.lat, longitude: location.lng)
                         }
                     }
                     
@@ -56,7 +68,7 @@ class MapsService {
                 return retVal
             } else {
                 return nil
-            }            
+            }
         } catch {
             throw error
         }
@@ -64,12 +76,17 @@ class MapsService {
     
     func getAutoCompletePlaces(query: String, radius: Int, type: GooglePlaceType? = nil) async throws -> GoogleAutoCompleteModel? {
         do {
-            let coordinate = region.center
-            let urlStr = "\(googleMapsBaseURL)autocomplete/json?input=\(query)&location=\(coordinate.latitude),\(coordinate.longitude)&radius=\(radius)\(type != nil ? "&type=\(String(describing: type?.rawValue))" : "")&key=\(Keys.googleAPIKey)"
-            
-            guard let url = URL(string: urlStr) else { return nil }
-            if let data = try? await NetworkingManager.get(url: url) {
-                return try JSONDecoder().decode(GoogleAutoCompleteModel.self, from: data)
+            if let region = locationManager?.center {
+                let coordinate = region.center
+                let urlStr = getAutoCompletePlacesURLStr(query: query, 
+                                                         coordinate: coordinate,
+                                                         radius: radius,
+                                                         type: type)
+                
+                guard let url = URL(string: urlStr) else { return nil }
+                
+                let retVal = try await networkManager.get(url: url, type: GoogleAutoCompleteModel.self)
+                return retVal
             } else {
                 return nil
             }
@@ -80,17 +97,20 @@ class MapsService {
     
     func getLocation(latitude: Double, longitude: Double) async throws -> ReverseGeocodeModel? {
         do {
-            let urlStr = "\(googleGeocodeBaseURL)json?latlng=\(latitude),\(longitude)&key=\(Keys.googleAPIKey)"
+            let urlStr = "\(Constants.googleGeocodeBaseURL)json?latlng=\(latitude),\(longitude)&key=\(Keys.googleAPIKey)"
             
             guard let url = URL(string: urlStr) else { return nil }
             
-            if let data = try? await NetworkingManager.get(url: url) {
-                return try JSONDecoder().decode(ReverseGeocodeModel.self, from: data)
-            } else {
-                return nil
-            }
+            let retVal = try await networkManager.get(url: url, type: ReverseGeocodeModel.self)
+            
+            return retVal
         } catch {
             throw error
         }
+    }
+    
+    func setLocationManager(locationManager: LocationManager) {
+        self.locationManager = locationManager
+        self.region = locationManager.center
     }
 }

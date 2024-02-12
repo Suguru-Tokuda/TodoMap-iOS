@@ -11,11 +11,14 @@ import Combine
 class TodoItemListEditViewModel: ObservableObject {
     @Published var todoItemList: TodoItemListModel
     @Published var focusIndex: Int = -1
+    @Published var coreDataError: CoreDataError?
     var handlingScrollViewTapped: Bool = false
     var cancellables: Set<AnyCancellable> = []
+    var todoMapCoreDataManager: TodoMapCoreDataActions
     
-    init(todoItemGroup: TodoItemListModel) {
+    init(todoItemGroup: TodoItemListModel, todoMapCorreDataManager: TodoMapCoreDataActions = TodoMapCoreDataManager()) {
         self.todoItemList = todoItemGroup
+        self.todoMapCoreDataManager = todoMapCorreDataManager
         self.addSubscriptions()
     }
     
@@ -31,10 +34,16 @@ class TodoItemListEditViewModel: ObservableObject {
         self.focusIndex = todoItemList.items.count - 1
     }
     
-    func deleteTodoItem(id: UUID) {
+    func deleteTodoItem(id: UUID) async {
         if let index = todoItemList.items.firstIndex(where: { $0.id == id }) {
-            TodoItemService.shared.deleteTodoItemEntity(id: id)
-            todoItemList.items.remove(at: index)
+            do {
+                try await todoMapCoreDataManager.deleteTodoItemList(id: id)
+                todoItemList.items.remove(at: index)
+            } catch {
+                if let error = error as? CoreDataError {
+                    self.coreDataError = error
+                }
+            }
         }        
     }
     
@@ -69,7 +78,15 @@ class TodoItemListEditViewModel: ObservableObject {
         $todoItemList
             .receive(on: DispatchQueue.main)
             .sink { value in
-                TodoItemService.shared.mergeTodoItemListEntity(list: value)
+                Task {
+                    do {
+                        try await self.todoMapCoreDataManager.saveTodoItemList(list: value)
+                    } catch {
+                        if let error = error as? CoreDataError {
+                            self.coreDataError = error
+                        }
+                    }
+                }
             }
             .store(in: &cancellables)
     }

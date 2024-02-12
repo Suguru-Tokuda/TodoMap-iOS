@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - ReverseGeocodeModel
-struct ReverseGeocodeModel: Codable {
+struct ReverseGeocodeModel: Decodable {
     let plusCode: PlusCode
     let results: [Result]
     let status: String
@@ -20,7 +20,7 @@ struct ReverseGeocodeModel: Codable {
 }
 
 // MARK: - PlusCode
-struct PlusCode: Codable {
+struct PlusCode: Decodable {
     let compoundCode, globalCode: String
 
     enum CodingKeys: String, CodingKey {
@@ -30,7 +30,7 @@ struct PlusCode: Codable {
 }
 
 // MARK: - Result
-struct Result: Codable {
+struct Result: Decodable {
     let addressComponents: [AddressComponent]
     let formattedAddress: String
     let geometry: Geometry
@@ -49,7 +49,7 @@ struct Result: Codable {
 }
 
 // MARK: - AddressComponent
-struct AddressComponent: Codable {
+struct AddressComponent: Decodable {
     let longName, shortName: String
     let types: [String]
 

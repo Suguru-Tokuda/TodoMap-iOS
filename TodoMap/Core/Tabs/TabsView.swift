@@ -12,30 +12,16 @@ struct TabsView: View {
 
     var body: some View {
         CustomTabBarView(selection: $tabSelection) {
-            ZStack() {
-                Color.blue.ignoresSafeArea()
-                VStack {
-                    Text(String.constants.todo)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                }
-            }
-            .tabBarItem(
-                tab: .todo,
-                selection: $tabSelection
-            )
-            ZStack() {
-                Color.green.ignoresSafeArea()
-                VStack {
-                    Text(String.constants.map)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                }
-            }
-            .tabBarItem(
-                tab: .map,
-                selection: $tabSelection
-            )
+            TodoListContentView()
+                .tabBarItem(
+                    tab: .todo,
+                    selection: $tabSelection
+                )
+            PlacesSearchView()
+                .tabBarItem(
+                    tab: .map,
+                    selection: $tabSelection
+                )
         }
         .ignoresSafeArea(.keyboard)
     }

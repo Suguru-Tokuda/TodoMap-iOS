@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PlaceSearchListView: View {
     @EnvironmentObject private var vm: PlaceSearchViewModel
+    @EnvironmentObject var locationManager: LocationManager
     var predictions: [Prediction]
     var nearbySearchResults: [NearbySearchResult]
     var onPredictionSelected: ((_ prediction: Prediction) -> ())?
@@ -58,6 +59,9 @@ struct PlaceSearchListView: View {
                 }
             }
         }
+        .onAppear {
+            vm.setLocationManager(locationManager: locationManager)
+        }
         .scrollDismissesKeyboard(.interactively)
     }
 }
@@ -66,8 +70,10 @@ struct PlacesSearchListView_Previews: PreviewProvider {
     static var previews: some View {
         PlaceSearchListView(predictions: dev.placePredictions, nearbySearchResults: dev.nearbySearchResults)
             .environmentObject(PlaceSearchViewModel())
+            .environmentObject(LocationManager())
             .preferredColorScheme(.dark)
         PlaceSearchListView(predictions: dev.placePredictions, nearbySearchResults: dev.nearbySearchResults)
             .environmentObject(PlaceSearchViewModel())
+            .environmentObject(LocationManager())
     }
 }

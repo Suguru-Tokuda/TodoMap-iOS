@@ -13,7 +13,7 @@ struct TodoItemEditView: View {
     @FocusState var focusField: Int?
     var index: Int
     @Binding var focusIndex: Int
-    let onChange: (_ name: String) -> Void
+    let onChange: ((String) -> Void)
     
     var body: some View {
         HStack {

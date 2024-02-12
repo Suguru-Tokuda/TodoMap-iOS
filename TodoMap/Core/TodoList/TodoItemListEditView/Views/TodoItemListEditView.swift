@@ -27,22 +27,22 @@ struct TodoItemListEditView: View, KeyboardReadable {
                             name: $vm.todoItemList.name,
                             location: $vm.todoItemList.location
                         )
-                        .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets())
-                        .listRowBackground(Color.theme.background)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets())
+                            .listRowBackground(Color.theme.background)
                         TodoItemsEditView(
                             todoItems: $vm.todoItemList.items,
                             focusIndex: $vm.focusIndex
                         )
-                        .overlay(Group {
-                            if vm.todoItemList.items.isEmpty {
-                                Color.theme.background.ignoresSafeArea()
-                            }
-                        })
-                        .environmentObject(vm)
+                            .overlay(Group {
+                                if vm.todoItemList.items.isEmpty {
+                                    Color.theme.background.ignoresSafeArea()
+                                }
+                            })
+                            .environmentObject(vm)
                     }
-                    .scrollContentBackground(.hidden)
-                    .listStyle(PlainListStyle())
+                        .scrollContentBackground(.hidden)
+                        .listStyle(PlainListStyle())
                     Rectangle()
                         .fill(Color.theme.background)
                         .opacity(0.00001)
@@ -57,31 +57,14 @@ struct TodoItemListEditView: View, KeyboardReadable {
                     footer
                 }
             }
-            .padding(10)
+                .padding(10)
         }
-        .onReceive(keyboardPublisher, perform: { newIsKeyboardVisible in
-            if !newIsKeyboardVisible {
-                vm.handleScrollViewTapped(keyboardVisible)
-            }
-            keyboardVisible = newIsKeyboardVisible
-        })
-//        .onAppear {
-//            Task {
-//                let list = TodoItemService.shared.getTodoLists()
-//                list.forEach { el in
-//                    if let items = el.todoItemEntity {
-//                        let arr = items as! Set<TodoItemEntity>
-//                        
-//                        arr.forEach { item in
-//                            if let name = item.name {
-//                                print(name)
-//                            }
-//                        }
-//                    }
-//                }
-//                print(list.count)
-//            }
-//        }
+            .onReceive(keyboardPublisher, perform: { newIsKeyboardVisible in
+                if !newIsKeyboardVisible {
+                    vm.handleScrollViewTapped(keyboardVisible)
+                }
+                keyboardVisible = newIsKeyboardVisible
+            })
     }
 }
 

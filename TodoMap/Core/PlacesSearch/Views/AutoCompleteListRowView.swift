@@ -17,18 +17,21 @@ struct AutoCompleteListRowView: View {
                 if let structuredFormatting = prediction.structuredFormatting,
                    let mainText = structuredFormatting.mainText,
                    let secondaryText = structuredFormatting.secondaryText {
-                    Text(mainText)
-                        .font(.headline)
-                        .foregroundColor(Color.theme.text)
-                    Text(secondaryText)
-                        .font(.callout)
-                        .foregroundColor(Color.theme.secondaryText)
+                    Group {
+                        Text(mainText)
+                            .font(.headline)
+                            .foregroundColor(Color.theme.text)
+                        Text(secondaryText)
+                            .font(.callout)
+                            .foregroundColor(Color.theme.secondaryText)
+                    }
+                    .multilineTextAlignment(.leading)
                 }
             }
+            .padding(.vertical, 5)
             .padding(.horizontal, 5)
         }
         .border(width: 0.5, edges: [.bottom], color: Color.theme.secondaryText)
-        .frame(height: 70)
     }
 }
 

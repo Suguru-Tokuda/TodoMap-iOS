@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PlacesSearchView: View {
     @StateObject var vm = PlaceSearchViewModel()
+    @EnvironmentObject var locationManager: LocationManager
     var handleBackBtnTapped: (() -> ())?
     @State var textFieldFocused: Bool = false
     
@@ -54,8 +55,9 @@ struct PlacesSearchView: View {
             .padding(.horizontal, 10)
         }
         .onAppear {
+            vm.setLocationManager(locationManager: locationManager)
             Task {
-                await LocationService.shared.checkIfLocationServicesIsEnabled()
+                await vm.checkLocationServiceEnabled()
             }
         }
     }

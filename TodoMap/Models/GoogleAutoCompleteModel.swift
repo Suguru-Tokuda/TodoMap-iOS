@@ -12,7 +12,6 @@ struct GoogleAutoCompleteModel: Codable {
     var status: String?
 }
 
-// MARK: - Prediction
 struct Prediction: Codable, Hashable, Identifiable {
     var id: UUID = UUID()
     var description: String?
@@ -41,12 +40,10 @@ struct Prediction: Codable, Hashable, Identifiable {
     }
 }
 
-// MARK: - MatchedSubstring
 struct MatchedSubstring: Codable {
     var length, offset: Int?
 }
 
-// MARK: - StructuredFormatting
 struct StructuredFormatting: Codable {
     var mainText: String?
     var mainTextMatchedSubstrings: [MatchedSubstring]?
@@ -59,7 +56,6 @@ struct StructuredFormatting: Codable {
     }
 }
 
-// MARK: - Term
 struct Term: Codable {
     var offset: Int?
     var value: String?

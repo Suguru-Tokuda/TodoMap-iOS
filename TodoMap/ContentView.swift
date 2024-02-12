@@ -8,30 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
-    var todoItemGroup: TodoItemListModel
-    
-    init() {
-//        let todoItems = [
-//            TodoItemModel(id: UUID(), name: "Wiper Fluid", note: "Get the cheapest wiper fluid", completed: false, created: Date()),
-//            TodoItemModel(id: UUID(), name: "Kefer", note: "Plain Kefier", completed: true, created: Date()),
-//            TodoItemModel(id: UUID(), name: "Wiper Fluid", note: "Get the cheapest wiper fluid", completed: false, created: Date()),
-//            TodoItemModel(id: UUID(), name: "Wiper Fluid", note: "Get the cheapest wiper fluid", completed: true, created: Date())]
-        let location = ""
-        todoItemGroup = TodoItemListModel(
-            id: UUID(),
-            name: "",
-            items: [],
-            location: location,
-            created: Date(),
-            status: .active
-        )
-    }
+    @EnvironmentObject var coordinator: MainCoordinator
     
     var body: some View {
-//        TabsView()
-        TodoItemListEditView(todoItemGroup: todoItemGroup)
-//        TodoMapView()
-//        PlacesSearchView()
+        NavigationStack(path: $coordinator.path) {
+            coordinator.getPage(page: .tabs)
+                .navigationDestination(for: Page.self) { page in
+                    coordinator.getPage(page: page)
+                }
+        }
     }
 }
 

@@ -14,11 +14,16 @@ class PlaceSearchViewModel : ObservableObject {
     @Published var isLoading: Bool = false
     @Published var nearbySearchResults: [NearbySearchResult] = []
     @Published var predictions: [Prediction] = []
-    @Published var region: MKCoordinateRegion? = LocationService.shared.center
+    @Published var region: MKCoordinateRegion?
+    
+    var mapsService: MapsService
+    var locationManager: LocationManager
     var searchRadius: Int = 10_000 // 10km
     var cancellables: Set<AnyCancellable> = []
     
-    init() {
+    init(mapsService: MapsService = MapsService(), locationManager: LocationManager = LocationManager()) {
+        self.mapsService = mapsService
+        self.locationManager = locationManager
         addSubscriptions()
     }
     
@@ -46,7 +51,7 @@ class PlaceSearchViewModel : ObservableObject {
             .store(in: &cancellables)
         
         // listen to location center change
-        LocationService.shared.$center
+        self.locationManager.$center
             .receive(on: DispatchQueue.main)
             .sink { value in
                 Task {
@@ -66,8 +71,8 @@ class PlaceSearchViewModel : ObservableObject {
                 self.isLoading = true
             }
             
-            if let autocompleteRes = try await MapsService.shared.getAutoCompletePlaces(query: query, radius: searchRadius),
-               let nearBySearchRes = try await MapsService.shared.getNearbySearchResults(query: query, radius: searchRadius) {
+             if let autocompleteRes = try await mapsService.getAutoCompletePlaces(query: query, radius: searchRadius),
+               let nearBySearchRes = try await mapsService.getNearbySearchResults(query: query, radius: searchRadius) {
                 DispatchQueue.main.async {
                     self.predictions = autocompleteRes.predictions ?? []
                     self.nearbySearchResults = nearBySearchRes.results ?? []
@@ -86,5 +91,14 @@ class PlaceSearchViewModel : ObservableObject {
         self.predictions = []
         self.nearbySearchResults = []
         self.searchText = ""
+    }
+    
+    func checkLocationServiceEnabled() async {
+        await self.locationManager.checkIfLocationServicesIsEnabled()
+    }
+    
+    func setLocationManager(locationManager: LocationManager) {
+        self.locationManager = locationManager
+        self.mapsService.setLocationManager(locationManager: locationManager)
     }
 }
