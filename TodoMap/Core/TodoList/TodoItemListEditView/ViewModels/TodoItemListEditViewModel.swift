@@ -16,8 +16,8 @@ class TodoItemListEditViewModel: ObservableObject {
     var cancellables: Set<AnyCancellable> = []
     var todoMapCoreDataManager: TodoMapCoreDataActions
     
-    init(todoItemGroup: TodoItemListModel, todoMapCorreDataManager: TodoMapCoreDataActions = TodoMapCoreDataManager()) {
-        self.todoItemList = todoItemGroup
+    init(todoItemGroup: TodoItemListModel?, todoMapCorreDataManager: TodoMapCoreDataActions = TodoMapCoreDataManager()) {
+        self.todoItemList = todoItemGroup != nil ? todoItemGroup! : TodoItemListModel()
         self.todoMapCoreDataManager = todoMapCorreDataManager
         self.addSubscriptions()
     }

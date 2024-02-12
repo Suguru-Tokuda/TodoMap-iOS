@@ -6,36 +6,37 @@
 //
 
 import SwiftUI
+import Combine
 
 struct TodoItemGroupListView: View {
     @StateObject var vm: TodosViewModel
-    @State private var path: [TodoItemListModel] = []
+    @EnvironmentObject var coordinator: TodoListCoordinator
     
-    init(todoItemGroups: [TodoItemListModel] = []) {
+    init(todoItemGroups: [TodoItemListModel]) {
         _vm = StateObject(wrappedValue: TodosViewModel(todoItemGroups: todoItemGroups))
     }
-
+    
     var body: some View {
-        NavigationStack(path: $path) {
-            ZStack {
-                Color.theme.background
-                    .ignoresSafeArea()
-                VStack {
-                    header.padding(10)
-                    itemList
-                }
+        ZStack {
+            Color.theme.background
+                .ignoresSafeArea()
+            VStack {
+                header()
+                    .padding(10)
+                itemList
             }
         }
     }
 }
 
 extension TodoItemGroupListView {
-    private var header: some View {
+    @ViewBuilder
+    private func header() -> some View {
         ZStack {
             HStack {
                 Spacer()
                 Button {
-                    
+                    coordinator.push(.todoListEditor)
                 } label: {
                     Image(systemName: "plus")
                         .resizable()
@@ -55,7 +56,8 @@ extension TodoItemGroupListView {
                 ForEach(vm.todoItemGroups, id: \.self) { item in
                     TodoRowView(todoItemGroup: item)
                         .onTapGesture {
-                            path.append(item)
+                            coordinator.push(.todoListEditor)
+//                            path.append(item)
                         }
                 }
             }
@@ -70,8 +72,8 @@ extension TodoItemGroupListView {
 
 struct TodoListView_Previews: PreviewProvider {
     static var previews: some View {
-        TodoItemGroupListView(todoItemGroups: dev.todoItemGroups)
+        TodoItemGroupListView(todoItemGroups: [])
             .preferredColorScheme(.dark)
-        TodoItemGroupListView(todoItemGroups: dev.todoItemGroups)
+        TodoItemGroupListView(todoItemGroups: [])
     }
 }

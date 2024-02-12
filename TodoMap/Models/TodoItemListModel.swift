@@ -15,6 +15,31 @@ struct TodoItemListModel: Identifiable, Hashable {
     var created: Date
     var status: Status
     
+    init() {
+        name = ""
+        items = []
+        location = ""
+        created = Date()
+        status = .active
+    }
+    
+    init(id: UUID, name: String, items: [TodoItemModel], location: String, created: Date, status: Status) {
+        self.id = id
+        self.name = name
+        self.items = items
+        self.location = location
+        self.created = created
+        self.status = status
+    }
+    
+    init(name: String, items: [TodoItemModel], location: String, created: Date, status: Status) {
+        self.name = name
+        self.items = items
+        self.location = location
+        self.created = created
+        self.status = status
+    }
+    
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }

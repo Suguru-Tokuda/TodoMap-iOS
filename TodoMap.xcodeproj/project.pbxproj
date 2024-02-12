@@ -21,6 +21,8 @@
 		BB0961E62B7A5C3B00814C4A /* ApiKeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0961E52B7A5C3B00814C4A /* ApiKeyManager.swift */; };
 		BB0961E82B7A5C8600814C4A /* ApiKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0961E72B7A5C8600814C4A /* ApiKeyModel.swift */; };
 		BB0961EA2B7A5CCC00814C4A /* PlistError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0961E92B7A5CCC00814C4A /* PlistError.swift */; };
+		BB0961EC2B7A941A00814C4A /* MapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0961EB2B7A941A00814C4A /* MapCoordinator.swift */; };
+		BB0961EF2B7A988900814C4A /* MapsContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0961EE2B7A988900814C4A /* MapsContentView.swift */; };
 		BB4250052B766455009987FA /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4250042B766455009987FA /* HTTPMethod.swift */; };
 		BB42E1B02A8428A8001D2F05 /* TodoItemNameLocationEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42E1AF2A8428A8001D2F05 /* TodoItemNameLocationEditView.swift */; };
 		BB42E1B22A89E66D001D2F05 /* TodoItemsEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42E1B12A89E66D001D2F05 /* TodoItemsEditView.swift */; };
@@ -94,6 +96,8 @@
 		BB0961E52B7A5C3B00814C4A /* ApiKeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKeyManager.swift; sourceTree = "<group>"; };
 		BB0961E72B7A5C8600814C4A /* ApiKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKeyModel.swift; sourceTree = "<group>"; };
 		BB0961E92B7A5CCC00814C4A /* PlistError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistError.swift; sourceTree = "<group>"; };
+		BB0961EB2B7A941A00814C4A /* MapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCoordinator.swift; sourceTree = "<group>"; };
+		BB0961EE2B7A988900814C4A /* MapsContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapsContentView.swift; sourceTree = "<group>"; };
 		BB4250042B766455009987FA /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		BB42E1AF2A8428A8001D2F05 /* TodoItemNameLocationEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemNameLocationEditView.swift; sourceTree = "<group>"; };
 		BB42E1B12A89E66D001D2F05 /* TodoItemsEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemsEditView.swift; sourceTree = "<group>"; };
@@ -164,6 +168,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BB0961ED2B7A957500814C4A /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				BBD948D22A91AA0200777393 /* ViewModels */,
+				BBD948D32A91AA0800777393 /* Views */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
 		BB42E1B52A8AD00A001D2F05 /* CheckCircle */ = {
 			isa = PBXGroup;
 			children = (
@@ -194,8 +207,8 @@
 		BB629A8D2A82AABC00B14D49 /* TodosView */ = {
 			isa = PBXGroup;
 			children = (
-				BB629A8F2A82AAD300B14D49 /* Views */,
 				BB629A8E2A82AACD00B14D49 /* ViewModels */,
+				BB629A8F2A82AAD300B14D49 /* Views */,
 			);
 			path = TodosView;
 			sourceTree = "<group>";
@@ -341,7 +354,6 @@
 		BBA4F3C32A7F1AA900DF4148 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				BB7767162A94571C00E2A6BC /* PlacesSearch */,
 				BBD948D12A91A9F900777393 /* TodoMap */,
 				BB629A8C2A82AAA700B14D49 /* TodoList */,
 				BBA4F3CA2A7F1B4200DF4148 /* Components */,
@@ -443,8 +455,10 @@
 		BBD948D12A91A9F900777393 /* TodoMap */ = {
 			isa = PBXGroup;
 			children = (
-				BBD948D22A91AA0200777393 /* ViewModels */,
-				BBD948D32A91AA0800777393 /* Views */,
+				BB0961EB2B7A941A00814C4A /* MapCoordinator.swift */,
+				BB0961EE2B7A988900814C4A /* MapsContentView.swift */,
+				BB0961ED2B7A957500814C4A /* Map */,
+				BB7767162A94571C00E2A6BC /* PlacesSearch */,
 			);
 			path = TodoMap;
 			sourceTree = "<group>";
@@ -574,8 +588,10 @@
 				BB629A972A82AB7100B14D49 /* TodoItemGroupListView.swift in Sources */,
 				BB0961D42B76704900814C4A /* TodoMapCoreDataManager.swift in Sources */,
 				BBA4F3D12A7F1C0F00DF4148 /* String.swift in Sources */,
+				BB0961EC2B7A941A00814C4A /* MapCoordinator.swift in Sources */,
 				BB7767212A9458A700E2A6BC /* PlaceSearchListView.swift in Sources */,
 				BBA4F3D82A7F214800DF4148 /* Color.swift in Sources */,
+				BB0961EF2B7A988900814C4A /* MapsContentView.swift in Sources */,
 				BB77670F2A944C9400E2A6BC /* NetworkManager.swift in Sources */,
 				BB42E1B02A8428A8001D2F05 /* TodoItemNameLocationEditView.swift in Sources */,
 				BBA4F3DA2A7F233A00DF4148 /* TabsView.swift in Sources */,

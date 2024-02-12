@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct TabsView: View {
     @State var tabSelection: TabBarItem = .todo
@@ -13,11 +14,8 @@ struct TabsView: View {
     var body: some View {
         CustomTabBarView(selection: $tabSelection) {
             TodoListContentView()
-                .tabBarItem(
-                    tab: .todo,
-                    selection: $tabSelection
-                )
-            PlacesSearchView()
+                .tabBarItem(tab: .todo, selection: $tabSelection)
+            MapsContentView()
                 .tabBarItem(
                     tab: .map,
                     selection: $tabSelection

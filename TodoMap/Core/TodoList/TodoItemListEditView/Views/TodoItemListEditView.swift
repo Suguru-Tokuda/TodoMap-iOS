@@ -10,8 +10,10 @@ import SwiftUI
 struct TodoItemListEditView: View, KeyboardReadable {
     @StateObject var vm: TodoItemListEditViewModel
     @State var keyboardVisible: Bool = false
+    @Environment(\.dismiss) var dismiss
+    var onDismiss: (() -> ())?
     
-    init(todoItemGroup: TodoItemListModel) {
+    init(todoItemGroup: TodoItemListModel?) {
         _vm = StateObject(wrappedValue: TodoItemListEditViewModel(todoItemGroup: todoItemGroup))
     }
     
@@ -19,7 +21,6 @@ struct TodoItemListEditView: View, KeyboardReadable {
         ZStack {
             Color.theme.background
                 .ignoresSafeArea()
-
             VStack {
                 ZStack {
                     List {
@@ -95,8 +96,8 @@ extension TodoItemListEditView {
 
 struct TodoItemGroupEditView_Previews: PreviewProvider {
     static var previews: some View {
-        TodoItemListEditView(todoItemGroup: dev.todoItemGroup!)
+        TodoItemListEditView(todoItemGroup: .init())
             .preferredColorScheme(.dark)
-        TodoItemListEditView(todoItemGroup: dev.todoItemGroup!)
+        TodoItemListEditView(todoItemGroup: .init())
     }
 }

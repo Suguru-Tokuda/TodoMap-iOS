@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-enum TabBarItem: Hashable {
+enum TabBarItem: String, Hashable {
     case todo, map
     
     var iconName: String {

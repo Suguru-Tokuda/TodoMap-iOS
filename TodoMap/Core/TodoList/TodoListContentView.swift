@@ -8,21 +8,15 @@
 import SwiftUI
 
 struct TodoListContentView: View {
-    @ObservedObject var coordinator: TodoListCoordinator
-    
-    init() {
-        _coordinator = ObservedObject(wrappedValue: TodoListCoordinator())
-    }
-    
+    @StateObject var coordinator: TodoListCoordinator = TodoListCoordinator()
+        
     var body: some View {
-        coordinator.getPage(page: .todoList)
-            .navigationDestination(for: TodoListPage.self) { page in
-                coordinator.getPage(page: page)
-            }
+        NavigationStack(path: $coordinator.path) {
+            coordinator.build(page: .todoList)
+                .navigationDestination(for: TodoListPage.self) { page in
+                    coordinator.build(page: page)
+                }
+        }
         .environmentObject(coordinator)
     }
-}
-
-#Preview {
-    TodoListContentView()
 }

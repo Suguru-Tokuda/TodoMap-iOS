@@ -5,27 +5,66 @@
 //  Created by Suguru Tokuda on 2/11/24.
 //
 
-import Foundation
 import SwiftUI
 
-@MainActor
+enum TodoListPage: String, CaseIterable, Identifiable {
+    case todoList,
+         todoListEditor
+    var id: String { self.rawValue }
+}
+    
+//enum TodoListSheet: String, Identifiable {
+//    case someSheet
+//    var id: String { self.rawValue }
+//}
+//
+//enum TodoListFullScreenCover: String, Identifiable {
+//    case someFullScreenSheet
+//    var id: String { self.rawValue }
+//}
+
 class TodoListCoordinator: ObservableObject {
     @Published var path = NavigationPath()
+//    @Published var sheet: TodoListSheet?
+//    @Published var fullScreenCover: TodoListFullScreenCover?
+    var todoListGroup: TodoItemListModel?
     
-    func startCoordinator() {
-        path.append(TodoListPage.todoList)
+    func push(_ page: TodoListPage, todoListGroup: TodoItemListModel? = nil) {
+        self.todoListGroup = todoListGroup
+        path.append(page)
     }
     
+//    func presentSheet(_ sheet: TodoListSheet) {
+//        self.sheet = sheet
+//    }
+//    
+//    func presentFullSreenCover(_ fullScreenCover: TodoListFullScreenCover) {
+//        self.fullScreenCover = fullScreenCover
+//    }
+    
+    func pop() {
+        path.removeLast()
+    }
+    
+    func popToRoot() {
+        path.removeLast(path.count)
+    }
+    
+//    func dismissSheet() {
+//        self.sheet = nil
+//    }
+//    
+//    func dismissFullScreenCover() {
+//        self.fullScreenCover = nil
+//    }
+
     @ViewBuilder
-    func getPage(page: TodoListPage) -> some View {
+    func build(page: TodoListPage) -> some View {
         switch page {
         case .todoList:
-            TodoItemGroupListView()
+            TodoItemGroupListView(todoItemGroups: [])
+        case .todoListEditor:
+            TodoItemListEditView(todoItemGroup: todoListGroup)
         }
     }
-}
-
-enum TodoListPage: String, CaseIterable, Identifiable {
-    case todoList
-    var id: String { self.rawValue }
 }
