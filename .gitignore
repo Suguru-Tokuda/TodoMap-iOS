@@ -3,3 +3,4 @@ TodoMap.xcodeproj/xcuserdata/*
 TodoMap/**/.DS_Store
 **/.DS_Store
 TodoMap.xcodeproj/xcuserdata/*
+TodoMap/ApiKeys.plist

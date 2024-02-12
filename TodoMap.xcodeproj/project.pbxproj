@@ -17,6 +17,10 @@
 		BB0961DE2B7990BE00814C4A /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0961DD2B7990BE00814C4A /* MainCoordinator.swift */; };
 		BB0961E02B79960F00814C4A /* TodoListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0961DF2B79960F00814C4A /* TodoListCoordinator.swift */; };
 		BB0961E22B799EAE00814C4A /* TodoListContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0961E12B799EAE00814C4A /* TodoListContentView.swift */; };
+		BB0961E42B7A5C1400814C4A /* ApiKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB0961E32B7A5C1400814C4A /* ApiKeys.plist */; };
+		BB0961E62B7A5C3B00814C4A /* ApiKeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0961E52B7A5C3B00814C4A /* ApiKeyManager.swift */; };
+		BB0961E82B7A5C8600814C4A /* ApiKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0961E72B7A5C8600814C4A /* ApiKeyModel.swift */; };
+		BB0961EA2B7A5CCC00814C4A /* PlistError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0961E92B7A5CCC00814C4A /* PlistError.swift */; };
 		BB4250052B766455009987FA /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4250042B766455009987FA /* HTTPMethod.swift */; };
 		BB42E1B02A8428A8001D2F05 /* TodoItemNameLocationEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42E1AF2A8428A8001D2F05 /* TodoItemNameLocationEditView.swift */; };
 		BB42E1B22A89E66D001D2F05 /* TodoItemsEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42E1B12A89E66D001D2F05 /* TodoItemsEditView.swift */; };
@@ -41,7 +45,6 @@
 		BB77670F2A944C9400E2A6BC /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB77670E2A944C9400E2A6BC /* NetworkManager.swift */; };
 		BB7767112A9450C500E2A6BC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7767102A9450C500E2A6BC /* Constants.swift */; };
 		BB7767132A94522700E2A6BC /* GooglePlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7767122A94522700E2A6BC /* GooglePlaceType.swift */; };
-		BB7767152A9454FB00E2A6BC /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7767142A9454FB00E2A6BC /* Keys.swift */; };
 		BB77671A2A94586000E2A6BC /* PlacesSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7767192A94586000E2A6BC /* PlacesSearchViewModel.swift */; };
 		BB77671E2A94588900E2A6BC /* PlacesSearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB77671D2A94588900E2A6BC /* PlacesSearchBarView.swift */; };
 		BB7767212A9458A700E2A6BC /* PlaceSearchListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7767202A9458A700E2A6BC /* PlaceSearchListView.swift */; };
@@ -87,6 +90,10 @@
 		BB0961DD2B7990BE00814C4A /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		BB0961DF2B79960F00814C4A /* TodoListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListCoordinator.swift; sourceTree = "<group>"; };
 		BB0961E12B799EAE00814C4A /* TodoListContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListContentView.swift; sourceTree = "<group>"; };
+		BB0961E32B7A5C1400814C4A /* ApiKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ApiKeys.plist; sourceTree = "<group>"; };
+		BB0961E52B7A5C3B00814C4A /* ApiKeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKeyManager.swift; sourceTree = "<group>"; };
+		BB0961E72B7A5C8600814C4A /* ApiKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKeyModel.swift; sourceTree = "<group>"; };
+		BB0961E92B7A5CCC00814C4A /* PlistError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistError.swift; sourceTree = "<group>"; };
 		BB4250042B766455009987FA /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		BB42E1AF2A8428A8001D2F05 /* TodoItemNameLocationEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemNameLocationEditView.swift; sourceTree = "<group>"; };
 		BB42E1B12A89E66D001D2F05 /* TodoItemsEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemsEditView.swift; sourceTree = "<group>"; };
@@ -111,7 +118,6 @@
 		BB77670E2A944C9400E2A6BC /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		BB7767102A9450C500E2A6BC /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		BB7767122A94522700E2A6BC /* GooglePlaceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlaceType.swift; sourceTree = "<group>"; };
-		BB7767142A9454FB00E2A6BC /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		BB7767192A94586000E2A6BC /* PlacesSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesSearchViewModel.swift; sourceTree = "<group>"; };
 		BB77671D2A94588900E2A6BC /* PlacesSearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesSearchBarView.swift; sourceTree = "<group>"; };
 		BB7767202A9458A700E2A6BC /* PlaceSearchListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceSearchListView.swift; sourceTree = "<group>"; };
@@ -232,6 +238,7 @@
 				BB0961CF2B76683100814C4A /* NetworkError.swift */,
 				BB629A9E2A82ACAE00B14D49 /* Status.swift */,
 				BB0961DB2B787C6400814C4A /* LocationError.swift */,
+				BB0961E92B7A5CCC00814C4A /* PlistError.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -305,6 +312,7 @@
 		BBA4F3B42A7F199C00DF4148 /* TodoMap */ = {
 			isa = PBXGroup;
 			children = (
+				BB0961E32B7A5C1400814C4A /* ApiKeys.plist */,
 				BBA4F3B72A7F199C00DF4148 /* ContentView.swift */,
 				BB0961DD2B7990BE00814C4A /* MainCoordinator.swift */,
 				BBA4F3B52A7F199C00DF4148 /* MapTodoApp.swift */,
@@ -369,6 +377,7 @@
 				BB629AA22A82B9B100B14D49 /* TodoItemListModel.swift */,
 				BB629A9B2A82ABD300B14D49 /* TodoItemModel.swift */,
 				BB83ECA42AAFB48500BECCD3 /* ReverseGeocodeModel.swift */,
+				BB0961E72B7A5C8600814C4A /* ApiKeyModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -384,8 +393,8 @@
 		BBA4F3C72A7F1AC900DF4148 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				BB0961E52B7A5C3B00814C4A /* ApiKeyManager.swift */,
 				BB7767102A9450C500E2A6BC /* Constants.swift */,
-				BB7767142A9454FB00E2A6BC /* Keys.swift */,
 				BBCA8D3F2AA425E500D302B7 /* LocationManager.swift */,
 				BB77670E2A944C9400E2A6BC /* NetworkManager.swift */,
 				BB0961D32B76704900814C4A /* TodoMapCoreDataManager.swift */,
@@ -524,6 +533,7 @@
 			files = (
 				BBA4F3BD2A7F199D00DF4148 /* Preview Assets.xcassets in Resources */,
 				BBA4F3BA2A7F199D00DF4148 /* Assets.xcassets in Resources */,
+				BB0961E42B7A5C1400814C4A /* ApiKeys.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -571,6 +581,7 @@
 				BBA4F3DA2A7F233A00DF4148 /* TabsView.swift in Sources */,
 				BBCA8D482AA582B100D302B7 /* DistanceUnit.swift in Sources */,
 				BBCA8D402AA425E500D302B7 /* LocationManager.swift in Sources */,
+				BB0961EA2B7A5CCC00814C4A /* PlistError.swift in Sources */,
 				BB77670B2A943FC600E2A6BC /* MapsService.swift in Sources */,
 				BB629AAD2A82D73A00B14D49 /* TodoItemListEditViewModel.swift in Sources */,
 				BBAAA0592AA80ACD00631BD8 /* PersistenceController.swift in Sources */,
@@ -580,7 +591,6 @@
 				BB629A9C2A82ABD300B14D49 /* TodoItemModel.swift in Sources */,
 				BBD948D52A91AA1700777393 /* TodoMapView.swift in Sources */,
 				BB629A952A82AB5400B14D49 /* TodoRowView.swift in Sources */,
-				BB7767152A9454FB00E2A6BC /* Keys.swift in Sources */,
 				BBCA8D4A2AA5945900D302B7 /* Double.swift in Sources */,
 				BB629AA72A82C90A00B14D49 /* View.swift in Sources */,
 				BB7767132A94522700E2A6BC /* GooglePlaceType.swift in Sources */,
@@ -597,7 +607,9 @@
 				BB4250052B766455009987FA /* HTTPMethod.swift in Sources */,
 				BB42E1B42A89E6B5001D2F05 /* TodoItemEditView.swift in Sources */,
 				BBCA8D422AA436EE00D302B7 /* NearBySearchListRowView.swift in Sources */,
+				BB0961E82B7A5C8600814C4A /* ApiKeyModel.swift in Sources */,
 				BB42E1B72A8AD038001D2F05 /* CheckCircleView.swift in Sources */,
+				BB0961E62B7A5C3B00814C4A /* ApiKeyManager.swift in Sources */,
 				BB0961DE2B7990BE00814C4A /* MainCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
