@@ -56,8 +56,7 @@ extension TodoItemGroupListView {
                 ForEach(vm.todoItemGroups, id: \.self) { item in
                     TodoRowView(todoItemGroup: item)
                         .onTapGesture {
-                            coordinator.push(.todoListEditor)
-//                            path.append(item)
+                            coordinator.push(.todoListEditor, todoListGroup: item)
                         }
                 }
             }

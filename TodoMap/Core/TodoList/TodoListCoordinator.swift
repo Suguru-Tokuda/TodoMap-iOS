@@ -29,6 +29,11 @@ class TodoListCoordinator: ObservableObject {
 //    @Published var fullScreenCover: TodoListFullScreenCover?
     var todoListGroup: TodoItemListModel?
     
+    func push(_ page: TodoListPage) {
+        self.todoListGroup = nil
+        path.append(page)
+    }
+    
     func push(_ page: TodoListPage, todoListGroup: TodoItemListModel? = nil) {
         self.todoListGroup = todoListGroup
         path.append(page)
