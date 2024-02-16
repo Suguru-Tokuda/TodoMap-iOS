@@ -17,8 +17,6 @@ struct LocationSearchSheetView: View {
             PlacesSearchView {
                 dismiss()
             }
-            .padding(.horizontal, 5)
-            .padding(.top, 5)
         }
     }
 }

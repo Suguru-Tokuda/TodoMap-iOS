@@ -23,8 +23,8 @@ class DeveloperPreview {
         TodoItemModel(id: UUID(), name: "Wiper Fluid", note: "Get the cheapest wiper fluid", completed: false, created: Date()),
         TodoItemModel(id: UUID(), name: "Wiper Fluid", note: "Get the cheapest wiper fluid", completed: true, created: Date())]
     
-//    var location: LocationModel = LocationModel(name: "Walmart", coordinates: CLLocationCoordinate2D(latitude: 42.01542, longitude: -87.76869))
-    var location: String = ""
+    var location: LocationModel = LocationModel(name: "Walmart", coordinates: CLLocationCoordinate2D(latitude: 42.01542, longitude: -87.76869))
+//    var location: String = ""
     
     var todoItemGroup: TodoItemListModel?
     var todoItemGroups: [TodoItemListModel] = []

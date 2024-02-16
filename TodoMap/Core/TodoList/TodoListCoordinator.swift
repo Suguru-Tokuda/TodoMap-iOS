@@ -13,21 +13,24 @@ enum TodoListPage: String, CaseIterable, Identifiable {
     var id: String { self.rawValue }
 }
     
-//enum TodoListSheet: String, Identifiable {
-//    case someSheet
-//    var id: String { self.rawValue }
-//}
-//
-//enum TodoListFullScreenCover: String, Identifiable {
-//    case someFullScreenSheet
-//    var id: String { self.rawValue }
-//}
+enum TodoListSheet: String, CaseIterable, Identifiable {
+    case none
+    var id: String { self.rawValue }
+}
+
+enum TodoListFullScreenCover: String, CaseIterable, Identifiable {
+    case map
+    var id: String { self.rawValue }
+}
 
 class TodoListCoordinator: ObservableObject {
     @Published var path = NavigationPath()
-//    @Published var sheet: TodoListSheet?
-//    @Published var fullScreenCover: TodoListFullScreenCover?
+    @Published var sheet: TodoListSheet?
+    @Published var fullScreenCover: TodoListFullScreenCover?
+    
+    var location: ReverseGeocodeModel?
     var todoListGroup: TodoItemListModel?
+    var onLocationSelect: ((LocationModel) -> ())?
     
     func push(_ page: TodoListPage) {
         self.todoListGroup = nil
@@ -39,13 +42,13 @@ class TodoListCoordinator: ObservableObject {
         path.append(page)
     }
     
-//    func presentSheet(_ sheet: TodoListSheet) {
-//        self.sheet = sheet
-//    }
-//    
-//    func presentFullSreenCover(_ fullScreenCover: TodoListFullScreenCover) {
-//        self.fullScreenCover = fullScreenCover
-//    }
+    func presentSheet(_ sheet: TodoListSheet) {
+        self.sheet = sheet
+    }
+    
+    func presentFullSreenCover(_ fullScreenCover: TodoListFullScreenCover) {
+        self.fullScreenCover = fullScreenCover
+    }
     
     func pop() {
         path.removeLast()
@@ -55,21 +58,43 @@ class TodoListCoordinator: ObservableObject {
         path.removeLast(path.count)
     }
     
-//    func dismissSheet() {
-//        self.sheet = nil
-//    }
-//    
-//    func dismissFullScreenCover() {
-//        self.fullScreenCover = nil
-//    }
+    func dismissSheet() {
+        self.sheet = nil
+    }
+    
+    func dismissFullScreenCover() {
+        self.fullScreenCover = nil
+    }
+    
+    
+    func selectLocation(_ location: LocationModel) {
+        self.onLocationSelect?(location)
+        dismissFullScreenCover()
+    }
 
     @ViewBuilder
     func build(page: TodoListPage) -> some View {
         switch page {
         case .todoList:
-            TodoItemGroupListView(todoItemGroups: [])
+            TodoItemGroupListView()
         case .todoListEditor:
             TodoItemListEditView(todoItemGroup: todoListGroup)
+        }
+    }
+    
+    @ViewBuilder
+    func build(sheet: TodoListSheet) -> some View {
+        switch sheet {
+        case .none:
+            EmptyView()
+        }
+    }
+    
+    @ViewBuilder
+    func build(fullScreenCover: TodoListFullScreenCover) -> some View {
+        switch fullScreenCover {
+        case .map:
+            LocationSearchSheetView()
         }
     }
 }

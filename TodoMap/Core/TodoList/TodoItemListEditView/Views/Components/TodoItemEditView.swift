@@ -41,7 +41,6 @@ struct TodoItemEditView: View {
                     }
             }
         }
-        .frame(height: 50)
         .padding(.horizontal, 5)
         .padding(.vertical, 10)
         .background(Color.theme.background)

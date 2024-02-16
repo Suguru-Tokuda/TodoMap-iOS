@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var mainCoordinator: MainCoordinator
+    
     var body: some View {
-        TabsView()
+        mainCoordinator.build(page: .tabs)
     }
 }
 

@@ -50,6 +50,7 @@ extension CustomTabBarItemView {
 }
 
 extension CustomTabBarItemView {
+    @ViewBuilder
     private func tabView(tab: TabBarItem) -> some View {
         VStack(spacing: 2) {
             VStack(spacing: 1) {

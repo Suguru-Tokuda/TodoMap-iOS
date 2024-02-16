@@ -56,18 +56,20 @@ struct CustomMapView: UIViewRepresentable, View {
         return Coordinator(self, coordinateRegion: $coordinateRegion, annotations: $annotations, showUserLocation: showUserLocation)
     }
     
-    func updateUIView(_ uiView: MKMapView, context: Context) {
+    func updateUIView(_ mapView: MKMapView, context: Context) {
         if let region = coordinateRegion {
-            uiView.setRegion(region, animated: animateOnCenter)
+            mapView.setRegion(region, animated: animateOnCenter)
         }
         
         if annotations.isEmpty {
-            uiView.removeAnnotations(uiView.annotations)
+            mapView.removeAnnotations(mapView.annotations)
         } else {
-            uiView.addAnnotations(annotations)
+            mapView.addAnnotations(annotations)
         }
         
-        uiView.showsUserLocation = showUserLocation
+        DispatchQueue.main.async {
+            mapView.showsUserLocation = showUserLocation
+        }
     }
         
     class Coordinator: NSObject, MKMapViewDelegate {

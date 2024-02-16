@@ -15,7 +15,7 @@ struct TabsView: View {
         CustomTabBarView(selection: $tabSelection) {
             TodoListContentView()
                 .tabBarItem(tab: .todo, selection: $tabSelection)
-            MapsContentView()
+            TodoMapContentView()
                 .tabBarItem(
                     tab: .map,
                     selection: $tabSelection

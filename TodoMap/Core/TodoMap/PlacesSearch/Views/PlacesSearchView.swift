@@ -10,12 +10,15 @@ import SwiftUI
 struct PlacesSearchView: View {
     @StateObject var vm = PlaceSearchViewModel()
     @EnvironmentObject var locationManager: LocationManager
+    @EnvironmentObject var todoListCoordinator: TodoListCoordinator
     var handleBackBtnTapped: (() -> ())?
     @State var textFieldFocused: Bool = false
     
     var body: some View {
         ZStack {
-            TodoMapView()
+            MapContentView(onLocationSelect: { location in
+                todoListCoordinator.onLocationSelect?(location)
+            })
                 .background(ignoresSafeAreaEdges: .bottom)
                 .onTapGesture {
                     UIApplication.shared.endEditing()
@@ -43,6 +46,7 @@ struct PlacesSearchView: View {
                             textFieldFocused = focused
                         }
                     }
+                    .padding(.top, 10)
                 if !vm.predictions.isEmpty || !vm.nearbySearchResults.isEmpty {
                     PlaceSearchListView(
                         predictions: vm.predictions,

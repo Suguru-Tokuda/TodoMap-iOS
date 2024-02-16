@@ -7,20 +7,20 @@
 
 import SwiftUI
 
-//@MainActor
-class MainCoordinator: ObservableObject {
-//    @Published var path = NavigationPath()
-//        
-//    @ViewBuilder
-//    func build(page: Page) -> some View {
-//        switch page {
-//        case .tabs:
-//            TabsView()
-//        }
-//    }
+enum MainPage: String, CaseIterable, Identifiable {
+    case tabs
+    var id: String { self.rawValue }
 }
-//
-//enum Page: String, CaseIterable, Identifiable {
-//    case tabs
-//    var id: String { self.rawValue }
-//}
+
+
+class MainCoordinator: ObservableObject {
+    @Published var path = NavigationPath()
+
+    @ViewBuilder
+    func build(page: MainPage) -> some View {
+        switch page {
+        case .tabs:
+            TabsView()
+        }
+    }
+}

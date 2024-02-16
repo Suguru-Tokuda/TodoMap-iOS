@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import MapKit
 
-class PlaceSearchViewModel : ObservableObject {
+class PlaceSearchViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var isLoading: Bool = false
     @Published var nearbySearchResults: [NearbySearchResult] = []

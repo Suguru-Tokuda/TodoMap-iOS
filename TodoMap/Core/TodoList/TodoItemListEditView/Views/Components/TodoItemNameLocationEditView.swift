@@ -8,26 +8,28 @@
 import SwiftUI
 
 struct TodoItemNameLocationEditView: View {
-    @Binding var name: String
-    @Binding var location: String
-    @State private var showLocationSearchSheet = false
+    @ObservedObject var vm: TodoItemListEditViewModel
+    @EnvironmentObject var coordinator: TodoListCoordinator
     
     var body: some View {
         ZStack {
             Color.theme.background
             VStack {
-                TextField("Name", text: $name)
+                TextField("Name", text: $vm.todoItemList.name)
                     .font(.system(size: 33))
                     .fontWeight(.bold)
                 HStack {
-                    TextField("Location", text: $location)
+                    Text(vm.todoItemList.location?.name ?? "Location")
+                        .opacity(vm.todoItemList.location?.name.isEmpty ?? true ? 0.6 : 1)
+                        .disabled(true)
                         .font(.system(size: 25))
                         .fontWeight(.semibold)
                         .foregroundColor(Color.theme.secondaryText)
-                    mapBtn
-                        .sheet(isPresented: $showLocationSearchSheet) {
-                            LocationSearchSheetView()
-                        }
+                    Spacer()
+                    mapBtn()
+                }
+                .onTapGesture {
+                    coordinator.fullScreenCover = .map
                 }
             }
         }
@@ -36,9 +38,10 @@ struct TodoItemNameLocationEditView: View {
 }
 
 extension TodoItemNameLocationEditView {
-    var mapBtn: some View {
+    @ViewBuilder
+    private func mapBtn() -> some View {
         Button {
-            showLocationSearchSheet = true
+            coordinator.fullScreenCover = .map
         } label: {
             ZStack {
                 Circle()
@@ -58,8 +61,8 @@ struct TodoItemNameLocationEditView_Previews: PreviewProvider {
     @State static var focusIndex: Int = 0
     
     static var previews: some View {
-        TodoItemNameLocationEditView(name: $name, location: $location)
+        TodoItemNameLocationEditView(vm: .init(todoItemGroup: nil))
             .preferredColorScheme(.dark)
-        TodoItemNameLocationEditView(name: $name, location: $location)
+        TodoItemNameLocationEditView(vm: .init(todoItemGroup: nil))
     }
 }

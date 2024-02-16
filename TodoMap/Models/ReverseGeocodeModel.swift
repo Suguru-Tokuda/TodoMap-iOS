@@ -19,7 +19,6 @@ struct ReverseGeocodeModel: Decodable {
     }
 }
 
-// MARK: - PlusCode
 struct PlusCode: Decodable {
     let compoundCode, globalCode: String
 
@@ -29,7 +28,6 @@ struct PlusCode: Decodable {
     }
 }
 
-// MARK: - Result
 struct Result: Decodable {
     let addressComponents: [AddressComponent]
     let formattedAddress: String
@@ -48,7 +46,6 @@ struct Result: Decodable {
     }
 }
 
-// MARK: - AddressComponent
 struct AddressComponent: Decodable {
     let longName, shortName: String
     let types: [String]

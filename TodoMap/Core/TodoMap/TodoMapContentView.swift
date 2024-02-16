@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct MapsContentView: View {
-    @ObservedObject var coordinator: MapCoordinator = MapCoordinator()
+struct TodoMapContentView: View {
+    @StateObject var coordinator: TodoMapCoordinator = TodoMapCoordinator()
     
     var body: some View {
         NavigationStack(path: $coordinator.path) {
             coordinator.build(page: .placesSearch)
-                .navigationDestination(for: MapPage.self) { page in
+                .navigationDestination(for: TodoMapPage.self) { page in
                     coordinator.build(page: page)
                 }
         }
@@ -22,5 +22,5 @@ struct MapsContentView: View {
 }
 
 #Preview {
-    MapsContentView()
+    TodoMapContentView()
 }

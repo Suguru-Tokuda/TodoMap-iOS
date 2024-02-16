@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct TodoItemListEditView: View, KeyboardReadable {
+    @EnvironmentObject var coordinator: TodoListCoordinator
     @StateObject var vm: TodoItemListEditViewModel
     @State var keyboardVisible: Bool = false
-    @Environment(\.dismiss) var dismiss
-    var onDismiss: (() -> ())?
     
     init(todoItemGroup: TodoItemListModel?) {
         _vm = StateObject(wrappedValue: TodoItemListEditViewModel(todoItemGroup: todoItemGroup))
@@ -22,55 +21,65 @@ struct TodoItemListEditView: View, KeyboardReadable {
             Color.theme.background
                 .ignoresSafeArea()
             VStack {
+                header()
                 ZStack {
-                    List {
-                        TodoItemNameLocationEditView(
-                            name: $vm.todoItemList.name,
-                            location: $vm.todoItemList.location
-                        )
-                            .listRowSeparator(.hidden)
-                            .listRowInsets(EdgeInsets())
-                            .listRowBackground(Color.theme.background)
-                        TodoItemsEditView(
-                            todoItems: $vm.todoItemList.items,
-                            focusIndex: $vm.focusIndex
-                        )
-                            .overlay(Group {
-                                if vm.todoItemList.items.isEmpty {
-                                    Color.theme.background.ignoresSafeArea()
-                                }
-                            })
-                            .environmentObject(vm)
-                    }
-                        .scrollContentBackground(.hidden)
-                        .listStyle(PlainListStyle())
-                    Rectangle()
-                        .fill(Color.theme.background)
-                        .opacity(0.00001)
-                        .padding(.trailing, 0)
-                        .padding(.top, CGFloat(vm.todoItemList.items.count) * CGFloat(50) + CGFloat(100))
-                        .onTapGesture {
-                            vm.handleScrollViewTapped(keyboardVisible)
+                    ScrollView {
+                        LazyVStack(spacing: 0) {
+                            TodoItemNameLocationEditView(vm: vm)
+                                .onTapGesture {}
+                            TodoItemsEditView(
+                                focusIndex: $vm.focusIndex,
+                                vm: vm
+                            )
                         }
+                    }
+                }
+                .onTapGesture {
+                    vm.handleScrollViewTapped(keyboardVisible)
                 }
                 Spacer()
                 if ((vm.todoItemList.items.isEmpty || !vm.isLastItemEmpty()) && !keyboardVisible) {
-                    footer
+                    footer()
                 }
             }
                 .padding(10)
         }
-            .onReceive(keyboardPublisher, perform: { newIsKeyboardVisible in
-                if !newIsKeyboardVisible {
-                    vm.handleScrollViewTapped(keyboardVisible)
-                }
-                keyboardVisible = newIsKeyboardVisible
-            })
+        .onAppear {
+            coordinator.onLocationSelect = { location in
+                vm.setLocation(location)
+                coordinator.dismissSheet()
+                coordinator.dismissFullScreenCover()
+            }
+        }
+        .onReceive(keyboardPublisher, perform: { newIsKeyboardVisible in
+            if !newIsKeyboardVisible {
+                vm.handleScrollViewTapped(keyboardVisible)
+            }
+            keyboardVisible = newIsKeyboardVisible
+        })
+        .navigationBarBackButtonHidden()
     }
 }
 
 extension TodoItemListEditView {
-    private var footer: some View {
+    @ViewBuilder
+    private func header() -> some View {
+        HStack {
+            Button(action: {
+                Task {
+                    await vm.saveDeleteItems()
+                    coordinator.pop()
+                }
+            }, label: {
+                Image(systemName: "chevron.left")
+                Text("Back")
+            })
+            Spacer()
+        }
+    }
+    
+    @ViewBuilder
+    private func footer() -> some View {
         HStack {
             Button {
                 vm.addTodoItem()

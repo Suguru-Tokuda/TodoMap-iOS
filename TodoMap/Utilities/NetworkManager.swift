@@ -33,7 +33,6 @@ extension Networking {
         } catch {
             throw NetworkError.unknown
         }
-
     }
 
     func getRequest(url: URL, method: HTTPMethod = .get, headers: [String: String]? = nil) -> URLRequest {
@@ -51,5 +50,4 @@ extension Networking {
     }
 }
 
-class NetworkManager: Networking {
-}
+class NetworkManager: Networking {}

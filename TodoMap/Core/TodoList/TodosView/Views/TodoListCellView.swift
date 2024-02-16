@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-struct TodoRowView: View {
+struct TodoListCellView: View {
     var todoItemGroup: TodoItemListModel
+    var itemCount: Int
     
     var body: some View {
         ZStack(alignment: .leading) {
@@ -16,29 +17,32 @@ struct TodoRowView: View {
             VStack(alignment: .center) {
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("\(todoItemGroup.name)")
-                            .font(.headline)
+                        HStack {
+                            Text("\(todoItemGroup.name)")
+                                .font(.headline)
+                            Spacer()
+                            Text("Created: \(todoItemGroup.created.formatted(date: .abbreviated, time: .omitted))")
+                                .font(.caption)
+                        }
                         Text("\(todoItemGroup.items.count) item\(todoItemGroup.items.count > 1 ? "s" : "")")
-                            .font(.caption)
-                        Text("Created: \(todoItemGroup.created.formatted(date: .abbreviated, time: .shortened))")
                             .font(.caption)
                     }
                 }
             }
-            .padding(.vertical, 20)
+            .padding(.vertical, 10)
             .padding(.horizontal, 10)
         }
-        .frame(minHeight: 70, maxHeight: 70)
-        .border(width: 1, edges: [.top, .bottom], color: Color.theme.secondaryText)
+        .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+        .border(width: 1, edges: [.bottom], color: Color.theme.secondaryText.opacity(0.8))
     }
 }
 
 struct TodoRowView_Previews: PreviewProvider {
     static var previews: some View {
-        TodoRowView(todoItemGroup: dev.todoItemGroup!)
+        TodoListCellView(todoItemGroup: dev.todoItemGroup!, itemCount: dev.todoItemGroup!.items.count)
             .preferredColorScheme(.dark)
             .previewLayout(.sizeThatFits)
-        TodoRowView(todoItemGroup: dev.todoItemGroup!)
+        TodoListCellView(todoItemGroup: dev.todoItemGroup!, itemCount: dev.todoItemGroup!.items.count)
             .previewLayout(.sizeThatFits)
     }
 }

@@ -7,15 +7,12 @@
 
 import SwiftUI
 import Combine
+import CoreData
 
 struct TodoItemGroupListView: View {
-    @StateObject var vm: TodosViewModel
+    @StateObject var vm: TodosViewModel = TodosViewModel()
     @EnvironmentObject var coordinator: TodoListCoordinator
-    
-    init(todoItemGroups: [TodoItemListModel]) {
-        _vm = StateObject(wrappedValue: TodosViewModel(todoItemGroups: todoItemGroups))
-    }
-    
+        
     var body: some View {
         ZStack {
             Color.theme.background
@@ -23,8 +20,18 @@ struct TodoItemGroupListView: View {
             VStack {
                 header()
                     .padding(10)
-                itemList
+                itemList()
             }
+        }
+        .task {
+            await vm.getAllLists()
+        }
+        .alert(isPresented: $vm.errorOccured, error: vm.coreDataError) {
+            Button(action: {
+                vm.supressError()
+            }, label: {
+                Text("OK")
+            })
         }
     }
 }
@@ -50,29 +57,34 @@ extension TodoItemGroupListView {
         }
     }
     
-    private var itemList: some View {
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                ForEach(vm.todoItemGroups, id: \.self) { item in
-                    TodoRowView(todoItemGroup: item)
-                        .onTapGesture {
-                            coordinator.push(.todoListEditor, todoListGroup: item)
+    @ViewBuilder
+    private func itemList() -> some View {
+        List {
+            ForEach(Array(zip(vm.todoItemGroups.indices, vm.todoItemGroups)), id: \.0) { index, list in
+                TodoListCellView(todoItemGroup: list, itemCount: list.items.count)
+                    .onTapGesture {
+                        coordinator.push(.todoListEditor, todoListGroup: list)
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        Button(role: .destructive) {
+                            Task(priority: .userInitiated) {
+                                await vm.deleteList(list, index)
+                            }                            
+                        } label: {
+                            Image(systemName: "trash.fill")
                         }
-                }
+                    }
             }
         }
-        .navigationDestination(for: TodoItemListModel.self, destination: { item in
-            Text(item.name)
-        })
+        .listStyle(.plain)
         .scrollContentBackground(.hidden)
-        .listStyle(PlainListStyle())
     }
 }
 
 struct TodoListView_Previews: PreviewProvider {
     static var previews: some View {
-        TodoItemGroupListView(todoItemGroups: [])
+        TodoItemGroupListView()
             .preferredColorScheme(.dark)
-        TodoItemGroupListView(todoItemGroups: [])
+        TodoItemGroupListView()
     }
 }

@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct PlaceSelectionView: View {
     var location: ReverseGeocodeModel?
-    var onLocationSelect: ((_ location: ReverseGeocodeModel, _ locationName: String) -> ())?
+    var onLocationSelect: ((LocationModel) -> ())?
     @State var locationName: String = ""
     
     var body: some View {
@@ -37,7 +38,6 @@ struct PlaceSelectionView: View {
 }
 
 extension PlaceSelectionView {
-    
     private func getLocationLabel(location: ReverseGeocodeModel) -> some View {
         Text(location.results[0].formattedAddress)
             .foregroundColor(Color.theme.text)
@@ -52,8 +52,13 @@ extension PlaceSelectionView {
     
     private var selectBtn: some View {
         Button {
-            if let location = location {
-                onLocationSelect?(location, locationName)
+            if let location,
+               let result = location.results.first,
+               let geoLocation = result.geometry.location {
+                let locationModel = LocationModel(name: locationName.isEmpty ? result.formattedAddress : locationName,
+                                                  coordinates: CLLocationCoordinate2D(latitude: geoLocation.lat,
+                                                                                      longitude: geoLocation.lng))
+                onLocationSelect?(locationModel)
             }
         } label: {
             Text("Select")
@@ -66,7 +71,6 @@ extension PlaceSelectionView {
                 .overlay(
                     RoundedRectangle(cornerRadius: 10.0)
                         .stroke(lineWidth: 2.0)
-                        
                 )
         }
     }

@@ -11,6 +11,7 @@ import MapKit
 struct TodoMapView: View {
     @StateObject private var vm: TodoMapViewModel = TodoMapViewModel()
     @EnvironmentObject var locationManager: LocationManager
+    @EnvironmentObject var mapCoordinator: MapCoordinator
 
     var body: some View {
         ZStack {
@@ -28,16 +29,19 @@ struct TodoMapView: View {
                     }
                 }
                 .ignoresSafeArea()
-                .sheet(isPresented: $vm.locationSelectionSheeetPresented) {
-                    if let location = vm.location {
-                        PlaceSelectionView(location: location) { (location, locationName) in
-                            print(location)
-                            print(locationName)
-                        }
-                    }
-                }
+//                .sheet(isPresented: $vm.locationSelectionSheeetPresented) {
+//                    if let location = vm.location {
+//                        PlaceSelectionView(location: location) { (location, locationName) in
+//                            print(location)
+//                            print(locationName)
+//                        }
+//                    }
+//                }
                 .onAppear {
                     vm.setLocationManager(locationManager: locationManager)
+                    vm.showSelectionSheet = { location in
+                        mapCoordinator.showplaceSelectionSheet(location: location)
+                    }
                 }
         }
     }

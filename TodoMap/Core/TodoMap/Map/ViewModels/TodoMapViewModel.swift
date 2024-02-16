@@ -11,13 +11,13 @@ import Combine
 class TodoMapViewModel: ObservableObject {
     @Published var mapRegion: MKCoordinateRegion?
     @Published var annotations: [MKPointAnnotation] = []
-    @Published var locationSelectionSheeetPresented: Bool = false
     @Published var location: ReverseGeocodeModel?
     @Published var networkError: NetworkError?
 
     var locationManager: LocationManager?
     var mapsService: MapsService
     var cancellables: Set<AnyCancellable> = []
+    var showSelectionSheet: ((ReverseGeocodeModel) -> ())?
     
     init(mapsService: MapsService = MapsService()) {
         self.mapsService = mapsService
@@ -33,20 +33,13 @@ class TodoMapViewModel: ObservableObject {
         
         locationManager?.$center
             .receive(on: DispatchQueue.main)
-            .sink { value in
+            .sink { [weak self] value in
+                guard let self = self else { return }
                 if value != nil {
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
+                    DispatchQueue.main.async {
                         self.mapRegion = value
                     }
                 }
-            }
-            .store(in: &cancellables)
-
-        $locationSelectionSheeetPresented
-            .receive(on: DispatchQueue.main)
-            .sink { value in
-                if !value { self.annotations = [] }
             }
             .store(in: &cancellables)
     }
@@ -56,7 +49,8 @@ class TodoMapViewModel: ObservableObject {
             if let location = try await mapsService.getLocation(latitude: coordinate.latitude, longitude: coordinate.longitude) {
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
-                    self.locationSelectionSheeetPresented = true
+                    showSelectionSheet?(location)
+//                    self.locationSelectionSheeetPresented = true
                     self.location = location
                 }
             }
@@ -68,8 +62,13 @@ class TodoMapViewModel: ObservableObject {
     }
     
     func addAnnotation(annotation: MKPointAnnotation, reset: Bool = false) {
-        if reset { self.annotations = [annotation] }
-        else { self.annotations.append(annotation) }
+        DispatchQueue.main.async {
+            if reset { self.annotations = [] }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.annotations.append(annotation)
+            }
+        }
     }
     
     func handleNewCoordinate(coordinate: CLLocationCoordinate2D) {
