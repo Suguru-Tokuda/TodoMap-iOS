@@ -200,6 +200,20 @@ extension TodoMapCoreDataActions {
         }
         
         guard let entity else { throw CoreDataError.delete }
+        
+        if let items = entity.todoItemEntity as? Set<TodoItemEntity> {
+            for item in items {
+                if let id = item.id {
+                    try await deleteTodoItem(id: id, entity: item, context: context)
+                }
+            }
+        }
+        
+        if let locationEntity = entity.locationEntity,
+           let id = locationEntity.id {
+            try await deleteLocation(id: id, entity: locationEntity, context: context)
+        }
+        
         context.delete(entity)
         try self.save(context: context)
     }
