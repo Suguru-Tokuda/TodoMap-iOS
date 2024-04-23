@@ -29,6 +29,7 @@ struct CustomTabBarView<Content : View>: View {
             )
         }
         .onPreferenceChange(TabBarItemsPreferenceKey.self) { value in
+            print(value)
             self.tabs = value
         }
     }

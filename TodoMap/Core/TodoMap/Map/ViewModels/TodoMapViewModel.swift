@@ -7,6 +7,7 @@
 
 import MapKit
 import Combine
+import Foundation
 
 class TodoMapViewModel: ObservableObject {
     @Published var mapRegion: MKCoordinateRegion?
@@ -29,13 +30,11 @@ class TodoMapViewModel: ObservableObject {
     }
     
     private func addSubscription() {
-        cancellables.removeAll()
-        
-        locationManager?.$center
+        locationManager?.centerSubject
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
                 guard let self = self else { return }
-                if value != nil {
+                if let value {
                     DispatchQueue.main.async {
                         self.mapRegion = value
                     }
@@ -50,7 +49,6 @@ class TodoMapViewModel: ObservableObject {
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     showSelectionSheet?(location)
-//                    self.locationSelectionSheeetPresented = true
                     self.location = location
                 }
             }
@@ -81,7 +79,7 @@ class TodoMapViewModel: ObservableObject {
             annotation.accessibilityValue = result.placeId
         }
         
-        locationManager?.center = MKCoordinateRegion(center: coordinate, span: MapDetails.defaultSpan)
+        locationManager?.setCenter(center: MKCoordinateRegion(center: coordinate, span: MapDetails.defaultSpan))
         addAnnotation(annotation: annotation, reset: true)
     }
     
@@ -94,9 +92,15 @@ class TodoMapViewModel: ObservableObject {
         self.locationManager?.checkLocationAuthorization()
         self.locationManager?.updateCurrentLocation()
         self.addSubscription()
+        
+        self.mapRegion = locationManager.center
 
         Task(priority: .background) {
             await self.locationManager?.checkIfLocationServicesIsEnabled()
         }
+    }
+    
+    func focusOnCenter() {
+        self.mapRegion = locationManager?.center
     }
 }

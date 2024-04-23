@@ -14,7 +14,7 @@ struct LocationSearchSheetView: View {
         ZStack {
             Color.theme.background
                 .ignoresSafeArea()
-            PlacesSearchView {
+            PlacesSearchView { location in
                 dismiss()
             }
         }

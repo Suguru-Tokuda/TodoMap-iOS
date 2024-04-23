@@ -15,18 +15,24 @@ class TodoItemListEditViewModel: ObservableObject {
     var coreDataError: CoreDataError?
     var handlingScrollViewTapped: Bool = false
     var cancellables: Set<AnyCancellable> = []
+    var saveOnChange: Bool = true
+    var coordinatorType: CoordinatorType
     var todoMapCoreDataManager: TodoMapCoreDataActions
+    var onLocationSelect: ((LocationModel) -> ())?
     
-    init(todoItemGroup: TodoItemListModel?, todoMapCorreDataManager: TodoMapCoreDataActions = TodoMapCoreDataManager()) {
+    init(todoItemGroup: TodoItemListModel?, 
+         coordinatorType: CoordinatorType = .todoList,
+         saveOnChange: Bool = true,
+         todoMapCorreDataManager: TodoMapCoreDataActions = TodoMapCoreDataManager()) {
         self.todoItemList = todoItemGroup != nil ? todoItemGroup! : TodoItemListModel()
         self.todoMapCoreDataManager = todoMapCorreDataManager
-        self.addSubscriptions()
+        self.saveOnChange = saveOnChange
+        self.coordinatorType = coordinatorType
+        if saveOnChange { self.addSubscriptions() }
     }
     
     deinit {
-        self.cancellables.forEach { cancllable in
-            cancllable.cancel()
-        }
+        self.cancellables.forEach { $0.cancel() }
     }
     
     // MARK: public functions
@@ -40,7 +46,7 @@ class TodoItemListEditViewModel: ObservableObject {
     func deleteTodoItem(id: UUID) async {
         if let index = todoItemList.items.firstIndex(where: { $0.id == id }) {
             do {
-                try await todoMapCoreDataManager.deleteTodoItem(id: id)
+                try await todoMapCoreDataManager.deleteTodoItem(id: id, entity: nil)
                 DispatchQueue.main.async {
                     self.todoItemList.items.remove(at: index)
                 }
@@ -49,8 +55,6 @@ class TodoItemListEditViewModel: ObservableObject {
                     self.coreDataError = error
                 }
             }
-        } else {
-            print("index not found")
         }
     }
     
@@ -97,7 +101,19 @@ class TodoItemListEditViewModel: ObservableObject {
                 self.errorOccured = true
                 self.coreDataError = error as? CoreDataError ?? nil
             }
-            
+        }
+    }
+    
+    func saveList() async {
+        do {
+            try await self.todoMapCoreDataManager.saveTodoItemList(list: todoItemList)
+        } catch {
+            if let error = error as? CoreDataError {
+                DispatchQueue.main.async {
+                    self.coreDataError = error
+                    self.errorOccured = true
+                }
+            }
         }
     }
 
@@ -131,5 +147,17 @@ class TodoItemListEditViewModel: ObservableObject {
         DispatchQueue.main.async {
             self.focusIndex = -1
         }
+    }
+    
+    func addLocationSubscription(subject: inout PassthroughSubject<LocationModel?, Never>) {
+        subject
+            .receive(on: DispatchQueue.main)
+            .sink { location in
+                if let location {
+                    self.todoItemList.location = location
+                    self.onLocationSelect?(location)
+                }
+            }
+            .store(in: &cancellables)
     }
 }

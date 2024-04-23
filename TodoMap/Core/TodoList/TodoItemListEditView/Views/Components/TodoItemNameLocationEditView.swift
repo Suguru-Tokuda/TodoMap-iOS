@@ -10,26 +10,31 @@ import SwiftUI
 struct TodoItemNameLocationEditView: View {
     @ObservedObject var vm: TodoItemListEditViewModel
     @EnvironmentObject var coordinator: TodoListCoordinator
+    var coordinatorType: CoordinatorType = .todoList
     
     var body: some View {
         ZStack {
             Color.theme.background
             VStack {
                 TextField("Name", text: $vm.todoItemList.name)
-                    .font(.system(size: 33))
+                    .font(.system(size: 32))
                     .fontWeight(.bold)
                 HStack {
                     Text(vm.todoItemList.location?.name ?? "Location")
                         .opacity(vm.todoItemList.location?.name.isEmpty ?? true ? 0.6 : 1)
                         .disabled(true)
-                        .font(.system(size: 25))
+                        .font(.system(size: 22))
                         .fontWeight(.semibold)
                         .foregroundColor(Color.theme.secondaryText)
                     Spacer()
-                    mapBtn()
+                    if coordinatorType == .todoList {
+                        mapBtn()
+                    }
                 }
                 .onTapGesture {
-                    coordinator.fullScreenCover = .map
+                    if coordinatorType == .todoList {
+                        coordinator.fullScreenCover = .map
+                    }
                 }
             }
         }

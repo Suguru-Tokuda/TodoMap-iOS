@@ -38,6 +38,10 @@ class TodosViewModel: ObservableObject {
             
             DispatchQueue.main.async {
                 self.todoItemGroups = parsedList
+                
+                parsedList.forEach { list in
+                    print(list.name)
+                }
             }
         } catch {
             DispatchQueue.main.async {
@@ -47,13 +51,13 @@ class TodosViewModel: ObservableObject {
         }
     }
     
-    func deleteList(_ list: TodoItemListModel, _ index: Int) async {
+    func deleteList(_ list: TodoItemListModel) async {
         do {
             for item in list.items {
-                try await coreDataManager.deleteTodoItem(id: item.id)
+                try await coreDataManager.deleteTodoItem(id: item.id, entity: nil)
             }
             
-            try await coreDataManager.deleteTodoItemList(id: list.id)
+            try await coreDataManager.deleteTodoItemList(id: list.id, entity: nil)
         } catch {
             DispatchQueue.main.async {
                 self.coreDataError = error as? CoreDataError ?? nil

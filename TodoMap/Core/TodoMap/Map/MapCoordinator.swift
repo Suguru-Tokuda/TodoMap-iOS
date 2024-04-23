@@ -23,16 +23,23 @@ class MapCoordinator: ObservableObject {
     var location: ReverseGeocodeModel?
     var onLocationSelect: ((LocationModel) -> ())?
     
-    func showplaceSelectionSheet(location: ReverseGeocodeModel) {
+    func showPlaceSelectionSheet(location: ReverseGeocodeModel) {
         self.sheet = .placeSelection
         self.location = location
+    }
+    
+    func dismissSheet() {
+        self.sheet = nil
     }
     
     @ViewBuilder
     func build(page: MapPage) -> some View {
         switch page {
         case .map:
-            PlacesSearchView()
+            PlacesSearchView { location in
+                self.onLocationSelect?(location)
+                self.dismissSheet()
+            }
         }
     }
 
@@ -42,6 +49,7 @@ class MapCoordinator: ObservableObject {
         case .placeSelection:
             PlaceSelectionView(location: location) { location in
                 self.onLocationSelect?(location)
+                self.dismissSheet()
             }
         }
     }

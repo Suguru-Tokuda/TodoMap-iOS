@@ -22,7 +22,7 @@ struct TodoItemListModel: Identifiable, Hashable {
         status = .active
     }
     
-    init(id: UUID, name: String, items: [TodoItemModel], location: LocationModel, created: Date, status: Status) {
+    init(id: UUID, name: String, items: [TodoItemModel], location: LocationModel?, created: Date, status: Status) {
         self.id = id
         self.name = name
         self.items = items
@@ -30,7 +30,7 @@ struct TodoItemListModel: Identifiable, Hashable {
         self.status = status
     }
     
-    init(name: String, items: [TodoItemModel], location: LocationModel, created: Date, status: Status) {
+    init(name: String, items: [TodoItemModel], location: LocationModel?, created: Date, status: Status) {
         self.name = name
         self.items = items
         self.location = location

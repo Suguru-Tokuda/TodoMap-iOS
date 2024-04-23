@@ -12,6 +12,7 @@ struct TodoMapView: View {
     @StateObject private var vm: TodoMapViewModel = TodoMapViewModel()
     @EnvironmentObject var locationManager: LocationManager
     @EnvironmentObject var mapCoordinator: MapCoordinator
+    @EnvironmentObject var mainCoordinator: MainCoordinator
 
     var body: some View {
         ZStack {
@@ -29,19 +30,16 @@ struct TodoMapView: View {
                     }
                 }
                 .ignoresSafeArea()
-//                .sheet(isPresented: $vm.locationSelectionSheeetPresented) {
-//                    if let location = vm.location {
-//                        PlaceSelectionView(location: location) { (location, locationName) in
-//                            print(location)
-//                            print(locationName)
-//                        }
-//                    }
-//                }
                 .onAppear {
                     vm.setLocationManager(locationManager: locationManager)
                     vm.showSelectionSheet = { location in
-                        mapCoordinator.showplaceSelectionSheet(location: location)
+                        mapCoordinator.showPlaceSelectionSheet(location: location)
                     }
+                }
+                .onChange(of: mainCoordinator.tabSelection) { newValue in
+                    if newValue == .map {
+                        vm.focusOnCenter()
+                    }                    
                 }
         }
     }

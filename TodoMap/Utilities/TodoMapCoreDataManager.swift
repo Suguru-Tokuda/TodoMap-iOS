@@ -5,27 +5,39 @@
 //  Created by Suguru Tokuda on 2/9/24.
 //
 
-import Foundation
 import CoreData
 
-protocol TodoMapCoreDataActions {
-    func saveTodoItemList(list: TodoItemListModel, context: NSManagedObjectContext) async throws
-    func getTodoItemListEntities(context: NSManagedObjectContext) async throws -> [TodoItemListEntity]
-    func getTodoItemListEntity(id: UUID, context: NSManagedObjectContext) async throws -> TodoItemListEntity?
-    func getLocationEntity(id: UUID, context: NSManagedObjectContext) async throws -> LocationEntity?
-    func getTodoItemList(id: UUID, entity: TodoItemListEntity?, context: NSManagedObjectContext) async throws -> TodoItemListModel?
-    func getTodoListItem(id: UUID, context: NSManagedObjectContext) async throws -> TodoItemEntity?
-    func deleteTodoItemList(id: UUID, entity: TodoItemListEntity?, context: NSManagedObjectContext) async throws
-    func deleteTodoItem(id: UUID, entity: TodoItemEntity?, context: NSManagedObjectContext) async throws
-    func deleteLocation(id: UUID, entity: LocationEntity?, context: NSManagedObjectContext) async throws
-    func clearAllFromDatabase(context: NSManagedObjectContext) async throws
-    func save(context: NSManagedObjectContext) throws
+enum TodoListCoreDataEntity: String {
+    case todoList = "TodoItemListEntity",
+         todoItem = "TodoItemEntity",
+         location = "LocationEntity"
 }
 
-extension TodoMapCoreDataActions {
-    func saveTodoItemList(list: TodoItemListModel, context: NSManagedObjectContext = PersistentController.shared.container.newBackgroundContext()) async throws {
+protocol TodoMapCoreDataActions {
+    func saveTodoItemList(list: TodoItemListModel) async throws
+    func getTodoItemListEntities() async throws -> [TodoItemListEntity]
+    func getTodoItemListEntity(id: UUID) async throws -> TodoItemListEntity?
+    func getLocationEntity(id: UUID) async throws -> LocationEntity?
+    func getTodoItemList(id: UUID, entity: TodoItemListEntity?) async throws -> TodoItemListModel?
+    func getTodoListItem(id: UUID) async throws -> TodoItemEntity?
+    func deleteTodoItemList(id: UUID, entity: TodoItemListEntity?) async throws
+    func deleteTodoItem(id: UUID, entity: TodoItemEntity?) async throws
+    func deleteLocation(id: UUID, entity: LocationEntity?) async throws
+    func clearAllFromDatabase() async throws
+    func save() throws
+}
+
+class TodoMapCoreDataManager: TodoMapCoreDataActions {
+    let context: NSManagedObjectContext
+
+    init(context: NSManagedObjectContext = PersistentController.shared.container.newBackgroundContext()) {
+        self.context = context
+        printSqlLocation()
+    }
+
+    func saveTodoItemList(list: TodoItemListModel) async throws {
         do {
-            var listToSave: TodoItemListEntity? = try await self.getTodoItemListEntity(id: list.id, context: context)
+            var listToSave: TodoItemListEntity? = try await self.getTodoItemListEntity(id: list.id)
             if listToSave == nil { listToSave = TodoItemListEntity(context: context) }
             
             if var listToSave = listToSave {
@@ -36,13 +48,13 @@ extension TodoMapCoreDataActions {
                 
                 if !list.name.isEmpty {
                     // Manage items
-                    try await manageItems(items: list.items, listEntity: &listToSave, context: context)
+                    try await manageItems(items: list.items, listEntity: &listToSave)
                 }
                 
                 // Manage location
-                listToSave.locationEntity = try await manageLocation(location: list.location, listEntity: &listToSave, context: context)
+                listToSave.locationEntity = try await manageLocation(location: list.location, listEntity: &listToSave)
 
-                try self.save(context: context)
+                try self.save()
             } else {
                 throw CoreDataError.save
             }
@@ -51,11 +63,11 @@ extension TodoMapCoreDataActions {
         }
     }
     
-    private func manageItems(items: [TodoItemModel], listEntity: inout TodoItemListEntity, context: NSManagedObjectContext) async throws {
+    private func manageItems(items: [TodoItemModel], listEntity: inout TodoItemListEntity) async throws {
         do {
             for item in items {
                 var createNew = false
-                var todoItemEntity = try await self.getTodoListItem(id: item.id, context: context)
+                var todoItemEntity = try await self.getTodoListItem(id: item.id)
                 
                 guard !item.name.isEmpty || item.note.isEmpty else {
                     if let todoItemEntity {
@@ -65,7 +77,7 @@ extension TodoMapCoreDataActions {
                 }
 
                 if todoItemEntity == nil {
-                    todoItemEntity = TodoItemEntity(context: context)
+                    todoItemEntity = TodoItemEntity()
                     createNew = true
                 }
                 
@@ -85,7 +97,7 @@ extension TodoMapCoreDataActions {
         }
     }
     
-    private func manageLocation(location: LocationModel?, listEntity: inout TodoItemListEntity, context: NSManagedObjectContext) async throws -> LocationEntity? {
+    private func manageLocation(location: LocationModel?, listEntity: inout TodoItemListEntity) async throws -> LocationEntity? {
         var retVal: LocationEntity?
         
         // location has been removed. remove the location data from database
@@ -93,7 +105,7 @@ extension TodoMapCoreDataActions {
             if let locationEntity = listEntity.locationEntity,
                let id = locationEntity.id {
                 do {
-                    try await deleteLocation(id: id, entity: locationEntity, context: context)
+                    try await deleteLocation(id: id, entity: locationEntity)
                 } catch {
                     throw CoreDataError.delete
                 }
@@ -109,7 +121,7 @@ extension TodoMapCoreDataActions {
                 retVal = locationEntity
             }
         } else if location != nil && listEntity.locationEntity == nil {
-            let locationEntity = LocationEntity(context: context)
+            let locationEntity = LocationEntity()
             
             if let locationModel = location {
                 locationEntity.id = locationModel.id
@@ -129,7 +141,7 @@ extension TodoMapCoreDataActions {
         return retVal
     }
     
-    func getTodoItemListEntities(context: NSManagedObjectContext = PersistentController.shared.container.newBackgroundContext()) async throws -> [TodoItemListEntity] {
+    func getTodoItemListEntities() async throws -> [TodoItemListEntity] {
         let request = NSFetchRequest<TodoItemListEntity>(entityName: TodoListCoreDataEntity.todoList.rawValue)
         
         do {
@@ -140,7 +152,7 @@ extension TodoMapCoreDataActions {
         }
     }
 
-    func getTodoItemListEntity(id: UUID, context: NSManagedObjectContext = PersistentController.shared.container.newBackgroundContext()) async throws -> TodoItemListEntity? {
+    func getTodoItemListEntity(id: UUID) async throws -> TodoItemListEntity? {
         let request = NSFetchRequest<TodoItemListEntity>(entityName: TodoListCoreDataEntity.todoList.rawValue)
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         
@@ -152,7 +164,7 @@ extension TodoMapCoreDataActions {
         }
     }
     
-    func getLocationEntity(id: UUID, context: NSManagedObjectContext) async throws -> LocationEntity? {
+    func getLocationEntity(id: UUID) async throws -> LocationEntity? {
         let request = NSFetchRequest<LocationEntity>(entityName: TodoListCoreDataEntity.location.rawValue)
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         
@@ -164,12 +176,12 @@ extension TodoMapCoreDataActions {
         }
     }
     
-    func getTodoItemList(id: UUID, entity: TodoItemListEntity?, context: NSManagedObjectContext = PersistentController.shared.container.newBackgroundContext()) async throws -> TodoItemListModel? {
+    func getTodoItemList(id: UUID, entity: TodoItemListEntity?) async throws -> TodoItemListModel? {
         if let entity {
             return .init(from: entity)
         } else {
             do {
-                if let entityData = try await getTodoItemListEntity(id: id, context: context) {
+                if let entityData = try await getTodoItemListEntity(id: id) {
                     return .init(from: entityData)
                 } else {
                     throw CoreDataError.get
@@ -180,7 +192,7 @@ extension TodoMapCoreDataActions {
         }
     }
     
-    func getTodoListItem(id: UUID, context: NSManagedObjectContext = PersistentController.shared.container.newBackgroundContext()) async throws -> TodoItemEntity? {
+    func getTodoListItem(id: UUID) async throws -> TodoItemEntity? {
         let request = NSFetchRequest<TodoItemEntity>(entityName: TodoListCoreDataEntity.todoItem.rawValue)
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         
@@ -192,45 +204,59 @@ extension TodoMapCoreDataActions {
         }
     }
     
-    func deleteTodoItemList(id: UUID, entity: TodoItemListEntity? = nil, context: NSManagedObjectContext = PersistentController.shared.container.newBackgroundContext()) async throws {
+    func deleteTodoItemList(id: UUID, entity: TodoItemListEntity? = nil) async throws {
         var entity = entity
         
         if entity == nil {
-            entity = try await self.getTodoItemListEntity(id: id, context: context)
+            entity = try await self.getTodoItemListEntity(id: id)
+        }
+        
+        guard let entity else { throw CoreDataError.delete }
+        
+        if let items = entity.todoItemEntity as? Set<TodoItemEntity> {
+            for item in items {
+                if let id = item.id {
+                    try await deleteTodoItem(id: id, entity: item)
+                }
+            }
+        }
+        
+        if let locationEntity = entity.locationEntity,
+           let id = locationEntity.id {
+            try await deleteLocation(id: id, entity: locationEntity)
+        }
+        
+        context.delete(entity)
+        try self.save()
+    }
+    
+    func deleteTodoItem(id: UUID, entity: TodoItemEntity? = nil) async throws {
+        var entity = entity
+        
+        if entity == nil {
+            entity = try await self.getTodoListItem(id: id)
         }
         
         guard let entity else { throw CoreDataError.delete }
         context.delete(entity)
-        try self.save(context: context)
+        try self.save()
     }
     
-    func deleteTodoItem(id: UUID, entity: TodoItemEntity? = nil, context: NSManagedObjectContext = PersistentController.shared.container.newBackgroundContext()) async throws {
+    func deleteLocation(id: UUID, entity: LocationEntity?) async throws {
         var entity = entity
         
         if entity == nil {
-            entity = try await self.getTodoListItem(id: id, context: context)
+            entity = try await self.getLocationEntity(id: id)
         }
         
         guard let entity else { throw CoreDataError.delete }
         context.delete(entity)
-        try self.save(context: context)
+        try self.save()
     }
     
-    func deleteLocation(id: UUID, entity: LocationEntity?, context: NSManagedObjectContext) async throws {
-        var entity = entity
-        
-        if entity == nil {
-            entity = try await self.getLocationEntity(id: id, context: context)
-        }
-        
-        guard let entity else { throw CoreDataError.delete }
-        context.delete(entity)
-        try self.save(context: context)
-    }
-    
-    func clearAllFromDatabase(context: NSManagedObjectContext = PersistentController.shared.container.newBackgroundContext()) async throws {
+    func clearAllFromDatabase() async throws {
         do {
-            let allListEntities = try await getTodoItemListEntities(context: context)
+            let allListEntities = try await getTodoItemListEntities()
             
             allListEntities.forEach { listEntity in
                 
@@ -241,33 +267,21 @@ extension TodoMapCoreDataActions {
                 context.delete(listEntity)
             }
             
-            try save(context: context)
+            try save()
         } catch {
             throw CoreDataError.delete
         }
     }
     
-    func save(context: NSManagedObjectContext = PersistentController.shared.container.newBackgroundContext()) throws {
+    func save() throws {
         do {
             try context.save()
         } catch {
             throw CoreDataError.save
         }
     }
-}
 
-enum TodoListCoreDataEntity: String {
-    case todoList = "TodoItemListEntity",
-         todoItem = "TodoItemEntity",
-         location = "LocationEntity"
-}
-
-class TodoMapCoreDataManager: TodoMapCoreDataActions {
-    init() {
-        pritSqlLocation()
-    }
-
-    func pritSqlLocation() {
+    func printSqlLocation() {
         let path = FileManager
             .default
             .urls(for: .applicationSupportDirectory, in: .userDomainMask)

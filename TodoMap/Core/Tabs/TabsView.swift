@@ -9,16 +9,16 @@ import SwiftUI
 import Combine
 
 struct TabsView: View {
-    @State var tabSelection: TabBarItem = .todo
+    @EnvironmentObject var mainCoordinator: MainCoordinator
 
     var body: some View {
-        CustomTabBarView(selection: $tabSelection) {
+        CustomTabBarView(selection: $mainCoordinator.tabSelection) {
             TodoListContentView()
-                .tabBarItem(tab: .todo, selection: $tabSelection)
+                .tabBarItem(tab: .todo, selection: $mainCoordinator.tabSelection)
             TodoMapContentView()
                 .tabBarItem(
                     tab: .map,
-                    selection: $tabSelection
+                    selection: $mainCoordinator.tabSelection
                 )
         }
         .ignoresSafeArea(.keyboard)

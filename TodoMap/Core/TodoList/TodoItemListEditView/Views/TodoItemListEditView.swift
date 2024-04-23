@@ -6,14 +6,21 @@
 //
 
 import SwiftUI
+import Combine
 
 struct TodoItemListEditView: View, KeyboardReadable {
     @EnvironmentObject var coordinator: TodoListCoordinator
+    @EnvironmentObject var todoMapCoordinator: TodoMapCoordinator
     @StateObject var vm: TodoItemListEditViewModel
     @State var keyboardVisible: Bool = false
+    var saveOnChange: Bool = false
+    var coordinatorType: CoordinatorType
+    var cancellables = Set<AnyCancellable>()
     
-    init(todoItemGroup: TodoItemListModel?) {
-        _vm = StateObject(wrappedValue: TodoItemListEditViewModel(todoItemGroup: todoItemGroup))
+    init(todoItemGroup: TodoItemListModel?, coordinatorType: CoordinatorType = .todoList, saveOnChange: Bool = true) {
+        self.coordinatorType = coordinatorType
+        self.saveOnChange = saveOnChange
+        _vm = StateObject(wrappedValue: TodoItemListEditViewModel(todoItemGroup: todoItemGroup, saveOnChange: saveOnChange))
     }
     
     var body: some View {
@@ -21,11 +28,19 @@ struct TodoItemListEditView: View, KeyboardReadable {
             Color.theme.background
                 .ignoresSafeArea()
             VStack {
-                header()
+                switch coordinatorType {
+                case .todoMap:
+                    headerForTodoMap()
+                case .todoList:
+                    backButtonHeader()
+                default:
+                    backButtonHeader()
+                }
+
                 ZStack {
                     ScrollView {
                         LazyVStack(spacing: 0) {
-                            TodoItemNameLocationEditView(vm: vm)
+                            TodoItemNameLocationEditView(vm: vm, coordinatorType: coordinatorType)
                                 .onTapGesture {}
                             TodoItemsEditView(
                                 focusIndex: $vm.focusIndex,
@@ -45,11 +60,22 @@ struct TodoItemListEditView: View, KeyboardReadable {
                 .padding(10)
         }
         .onAppear {
-            coordinator.onLocationSelect = { location in
-                vm.setLocation(location)
-                coordinator.dismissSheet()
+            if saveOnChange {
+                coordinator.onLocationSelect = { location in
+                    vm.setLocation(location)
+                    coordinator.dismissSheet()
+                    coordinator.dismissFullScreenCover()
+                }
+            }
+            
+            self.addSubscriptions()
+            
+            vm.onLocationSelect = { location in
                 coordinator.dismissFullScreenCover()
             }
+        }
+        .onDisappear {
+            removeSubscriptions()
         }
         .onReceive(keyboardPublisher, perform: { newIsKeyboardVisible in
             if !newIsKeyboardVisible {
@@ -62,19 +88,56 @@ struct TodoItemListEditView: View, KeyboardReadable {
 }
 
 extension TodoItemListEditView {
+    private func addSubscriptions() {
+        if coordinatorType == .todoList {
+            vm.addLocationSubscription(subject: &coordinator.locationSubject)
+        }
+    }
+    
+    private func removeSubscriptions() {
+        cancellables.forEach { $0.cancel() }
+    }
+}
+
+extension TodoItemListEditView {
     @ViewBuilder
-    private func header() -> some View {
+    private func backButtonHeader() -> some View {
         HStack {
             Button(action: {
                 Task {
                     await vm.saveDeleteItems()
-                    coordinator.pop()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        coordinator.pop()
+                    }
                 }
             }, label: {
                 Image(systemName: "chevron.left")
                 Text("Back")
             })
             Spacer()
+        }
+    }
+    
+    @ViewBuilder
+    private func headerForTodoMap() -> some View {
+        HStack {
+            Button(action: {
+                todoMapCoordinator.dismissFullCover()
+            }, label: {
+                Image(systemName: "xmark")
+            })
+            Spacer()
+            Button(action: {
+                Task {
+                    await vm.saveList()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        todoMapCoordinator.dismissFullCover()
+                    }
+                }
+            }, label: {
+                Text("Save")
+            })
+            .disabled(vm.todoItemList.name.isEmpty)
         }
     }
     

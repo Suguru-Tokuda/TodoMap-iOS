@@ -15,7 +15,9 @@ class PlaceSearchViewModel: ObservableObject {
     @Published var nearbySearchResults: [NearbySearchResult] = []
     @Published var predictions: [Prediction] = []
     @Published var region: MKCoordinateRegion?
+    @Published var errorOccured: Bool = false
     
+    var networkError: NetworkError?
     var mapsService: MapsService
     var locationManager: LocationManager
     var searchRadius: Int = 10_000 // 10km
@@ -51,15 +53,16 @@ class PlaceSearchViewModel: ObservableObject {
             .store(in: &cancellables)
         
         // listen to location center change
-        self.locationManager.$center
+        self.locationManager.centerSubject
             .receive(on: DispatchQueue.main)
-            .sink { value in
-                Task {
-                    await MainActor.run(body: {
-                        if let value = value {
+            .sink { [weak self] value in
+                guard let self = self else { return }
+                if let value {
+                    Task {
+                        await MainActor.run(body: {
                             self.region = value
-                        }
-                    })
+                        })
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -83,7 +86,12 @@ class PlaceSearchViewModel: ObservableObject {
                 self.isLoading = false
             }
         } catch {
-            throw error
+            DispatchQueue.main.async {
+                if let error = error as? NetworkError? {
+                    self.networkError = error
+                    self.errorOccured = true
+                }
+            }
         }
     }
     
@@ -100,5 +108,37 @@ class PlaceSearchViewModel: ObservableObject {
     func setLocationManager(locationManager: LocationManager) {
         self.locationManager = locationManager
         self.mapsService.setLocationManager(locationManager: locationManager)
+    }
+    
+    func getLocation(prediction: Prediction) async -> LocationModel? {
+        do {
+            let placeDetails = try await mapsService.getLocationDetails(placeId: prediction.placeId)
+            if let placeDetails {
+                let retVal: LocationModel = .init(name: placeDetails.formattedAddress,
+                                                  coordinates: CLLocationCoordinate2D(latitude: placeDetails.location.latitude,
+                                                                                      longitude: placeDetails.location.longitude))
+                return retVal
+            } else {
+                return nil
+            }
+        } catch {
+            DispatchQueue.main.async {
+                if let error = error as? NetworkError? {
+                    self.networkError = error
+                    self.errorOccured = true
+                }
+            }
+        }
+        
+        return nil
+    }
+    
+    func getLocation(nearbySearchResult: NearbySearchResult) -> LocationModel? {
+        if let name = nearbySearchResult.name,
+           let location = nearbySearchResult.geometry?.location {
+            return LocationModel(name: name, coordinates: CLLocationCoordinate2D(latitude: location.lat, longitude: location.lng))
+        } else {
+            return nil
+        }
     }
 }

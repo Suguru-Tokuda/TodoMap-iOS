@@ -6,15 +6,23 @@
 //
 
 import SwiftUI
+import Combine
 
 enum MainPage: String, CaseIterable, Identifiable {
     case tabs
     var id: String { self.rawValue }
 }
 
+enum CoordinatorType: String {
+    case main,
+         tabs,
+         todoMap,
+         todoList
+}
 
 class MainCoordinator: ObservableObject {
     @Published var path = NavigationPath()
+    @Published var tabSelection: TabBarItem = .todo
 
     @ViewBuilder
     func build(page: MainPage) -> some View {
@@ -22,5 +30,8 @@ class MainCoordinator: ObservableObject {
         case .tabs:
             TabsView()
         }
+    }
+    
+    func selectLocation(_: LocationModel) {
     }
 }

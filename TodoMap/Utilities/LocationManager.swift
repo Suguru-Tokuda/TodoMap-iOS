@@ -15,8 +15,10 @@ enum MapDetails {
 
 class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
     var locationManager: CLLocationManager?
-    @Published var center: MKCoordinateRegion?
-    @Published var currentLocation: MKCoordinateRegion?
+    var center: MKCoordinateRegion?
+    var centerSubject: PassthroughSubject<MKCoordinateRegion?, Never> = PassthroughSubject()
+    var currentLocation: MKCoordinateRegion?
+    var currentLocationSubject: PassthroughSubject<MKCoordinateRegion?, Never> = PassthroughSubject()
     @Published var locationError: LocationError?
     
     override init() {
@@ -48,6 +50,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
                 self.currentLocation = MKCoordinateRegion(center: location.coordinate, span: MapDetails.defaultSpan)
                 if self.center == nil {
                     if let currentLocation = self.currentLocation {
+                        self.centerSubject.send(currentLocation)
                         self.center = currentLocation
                     }
                 }
@@ -85,9 +88,22 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
                 center: CLLocationCoordinate2D(latitude: (manager.location?.coordinate.latitude)!,
                                                longitude: (manager.location?.coordinate.longitude)!),
                 span: MapDetails.defaultSpan)
+            self.centerSubject.send(center)
         } else {
             center!.center.latitude = (manager.location?.coordinate.latitude)!
             center!.center.longitude = (manager.location?.coordinate.longitude)!
         }
+    }
+}
+
+extension LocationManager {
+    func setCenter(center: MKCoordinateRegion) {
+        self.center = center
+        self.centerSubject.send(center)
+    }
+    
+    func setCurrentLocation(currentLocation: MKCoordinateRegion) {
+        self.currentLocation = currentLocation
+        self.currentLocationSubject.send(currentLocation)
     }
 }

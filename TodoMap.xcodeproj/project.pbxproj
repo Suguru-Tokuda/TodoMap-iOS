@@ -28,6 +28,7 @@
 		BB0B95F32B7E81F3004359D3 /* SwipeActionModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0B95F22B7E81F3004359D3 /* SwipeActionModifier.swift */; };
 		BB0B95F62B7FB6B8004359D3 /* MapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0B95F52B7FB6B8004359D3 /* MapCoordinator.swift */; };
 		BB0B95F82B7FB8E3004359D3 /* MapContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0B95F72B7FB8E3004359D3 /* MapContentView.swift */; };
+		BB0B95FA2B8121E4004359D3 /* GooglePlaceDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0B95F92B8121E4004359D3 /* GooglePlaceDetailsModel.swift */; };
 		BB4250052B766455009987FA /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4250042B766455009987FA /* HTTPMethod.swift */; };
 		BB42E1B02A8428A8001D2F05 /* TodoItemNameLocationEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42E1AF2A8428A8001D2F05 /* TodoItemNameLocationEditView.swift */; };
 		BB42E1B22A89E66D001D2F05 /* TodoItemsEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB42E1B12A89E66D001D2F05 /* TodoItemsEditView.swift */; };
@@ -108,6 +109,7 @@
 		BB0B95F22B7E81F3004359D3 /* SwipeActionModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeActionModifier.swift; sourceTree = "<group>"; };
 		BB0B95F52B7FB6B8004359D3 /* MapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCoordinator.swift; sourceTree = "<group>"; };
 		BB0B95F72B7FB8E3004359D3 /* MapContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapContentView.swift; sourceTree = "<group>"; };
+		BB0B95F92B8121E4004359D3 /* GooglePlaceDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlaceDetailsModel.swift; sourceTree = "<group>"; };
 		BB4250042B766455009987FA /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		BB42E1AF2A8428A8001D2F05 /* TodoItemNameLocationEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemNameLocationEditView.swift; sourceTree = "<group>"; };
 		BB42E1B12A89E66D001D2F05 /* TodoItemsEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemsEditView.swift; sourceTree = "<group>"; };
@@ -413,6 +415,7 @@
 				BB0961E72B7A5C8600814C4A /* ApiKeyModel.swift */,
 				BB77670C2A94424300E2A6BC /* GoogleAutoCompleteModel.swift */,
 				BBCA8D3D2AA41FB200D302B7 /* GoogleNearbySearchModel.swift */,
+				BB0B95F92B8121E4004359D3 /* GooglePlaceDetailsModel.swift */,
 				BB629AA42A82BBA100B14D49 /* LocationModel.swift */,
 				BB83ECA42AAFB48500BECCD3 /* ReverseGeocodeModel.swift */,
 				BB629AA22A82B9B100B14D49 /* TodoItemListModel.swift */,
@@ -483,8 +486,8 @@
 		BBD948D12A91A9F900777393 /* TodoMap */ = {
 			isa = PBXGroup;
 			children = (
-				BB0961EB2B7A941A00814C4A /* TodoMapCoordinator.swift */,
 				BB0961EE2B7A988900814C4A /* TodoMapContentView.swift */,
+				BB0961EB2B7A941A00814C4A /* TodoMapCoordinator.swift */,
 				BB0961ED2B7A957500814C4A /* Map */,
 				BB7767162A94571C00E2A6BC /* PlacesSearch */,
 			);
@@ -638,6 +641,7 @@
 				BB77670F2A944C9400E2A6BC /* NetworkManager.swift in Sources */,
 				BB42E1B02A8428A8001D2F05 /* TodoItemNameLocationEditView.swift in Sources */,
 				BBA4F3DA2A7F233A00DF4148 /* TabsView.swift in Sources */,
+				BB0B95FA2B8121E4004359D3 /* GooglePlaceDetailsModel.swift in Sources */,
 				BB0B95EF2B7E8017004359D3 /* SwipeActionsView.swift in Sources */,
 				BBCA8D482AA582B100D302B7 /* DistanceUnit.swift in Sources */,
 				BBCA8D402AA425E500D302B7 /* LocationManager.swift in Sources */,

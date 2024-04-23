@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 enum TodoListPage: String, CaseIterable, Identifiable {
     case todoList,
@@ -28,6 +29,7 @@ class TodoListCoordinator: ObservableObject {
     @Published var sheet: TodoListSheet?
     @Published var fullScreenCover: TodoListFullScreenCover?
     
+    var locationSubject: PassthroughSubject<LocationModel?, Never> = PassthroughSubject()
     var location: ReverseGeocodeModel?
     var todoListGroup: TodoItemListModel?
     var onLocationSelect: ((LocationModel) -> ())?
@@ -66,7 +68,6 @@ class TodoListCoordinator: ObservableObject {
         self.fullScreenCover = nil
     }
     
-    
     func selectLocation(_ location: LocationModel) {
         self.onLocationSelect?(location)
         dismissFullScreenCover()
@@ -94,7 +95,18 @@ class TodoListCoordinator: ObservableObject {
     func build(fullScreenCover: TodoListFullScreenCover) -> some View {
         switch fullScreenCover {
         case .map:
-            LocationSearchSheetView()
+            placesSearchView()
         }
+    }
+    
+    @ViewBuilder
+    func placesSearchView() -> some View {
+        PlacesSearchView(
+            onLocationSelect: { location in
+                self.locationSubject.send(location)
+        },
+            handleBackBtnTapped: {
+                self.dismissFullScreenCover()
+        })
     }
 }

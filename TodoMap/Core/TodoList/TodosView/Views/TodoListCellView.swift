@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct TodoListCellView: View {
-    var todoItemGroup: TodoItemListModel
+    var name: String
+    var created: Date
     var itemCount: Int
     
     var body: some View {
@@ -18,13 +19,13 @@ struct TodoListCellView: View {
                 HStack {
                     VStack(alignment: .leading) {
                         HStack {
-                            Text("\(todoItemGroup.name)")
+                            Text("\(name)")
                                 .font(.headline)
                             Spacer()
-                            Text("Created: \(todoItemGroup.created.formatted(date: .abbreviated, time: .omitted))")
+                            Text("Created: \(created.formatted(date: .abbreviated, time: .omitted))")
                                 .font(.caption)
                         }
-                        Text("\(todoItemGroup.items.count) item\(todoItemGroup.items.count > 1 ? "s" : "")")
+                        Text("\(itemCount) item\(itemCount > 1 ? "s" : "")")
                             .font(.caption)
                     }
                 }
@@ -39,10 +40,14 @@ struct TodoListCellView: View {
 
 struct TodoRowView_Previews: PreviewProvider {
     static var previews: some View {
-        TodoListCellView(todoItemGroup: dev.todoItemGroup!, itemCount: dev.todoItemGroup!.items.count)
+        TodoListCellView(name: dev.todoItemGroup!.name,
+                         created: dev.todoItemGroup!.created,
+                         itemCount: dev.todoItemGroup!.items.count)
             .preferredColorScheme(.dark)
             .previewLayout(.sizeThatFits)
-        TodoListCellView(todoItemGroup: dev.todoItemGroup!, itemCount: dev.todoItemGroup!.items.count)
-            .previewLayout(.sizeThatFits)
+        TodoListCellView(name: dev.todoItemGroup!.name,
+                         created: dev.todoItemGroup!.created,
+                         itemCount: dev.todoItemGroup!.items.count)
+        .previewLayout(.sizeThatFits)
     }
 }

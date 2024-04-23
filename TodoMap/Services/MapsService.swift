@@ -11,6 +11,8 @@ import Combine
 protocol MapServiceURL {
     func getNearBySearchResultsURLStr(query: String, coordinate: CLLocationCoordinate2D, radius: Int, apiKey: String, type: GooglePlaceType?) -> String
     func getAutoCompletePlacesURLStr(query: String, coordinate: CLLocationCoordinate2D, radius: Int, apiKey: String, type: GooglePlaceType?) -> String
+    func getGoogleGeocodeURLStr(latitude: Double, longitude: Double, apiKey: String) -> String
+    func getPlaceDetailsURLStr(placeId: String, fields: String, apiKey: String) -> String
 }
 
 extension MapServiceURL {
@@ -30,6 +32,16 @@ extension MapServiceURL {
                "&location=\(coordinate.latitude)%\(coordinate.longitude)" +
                "&radius=\(radius)" +
                "\(type != nil ? "&type=\(String(describing: type!.rawValue))" : "")" +
+               "&key=\(apiKey)"
+    }
+    
+    func getGoogleGeocodeURLStr(latitude: Double, longitude: Double, apiKey: String) -> String {
+        "\(Constants.googleGeocodeBaseURL)json?latlng=\(latitude),\(longitude)&key=\(apiKey)"
+    }
+    
+    func getPlaceDetailsURLStr(placeId: String, fields: String, apiKey: String) -> String {
+        return "\(Constants.googlePlacesBaseURL)\(placeId)" +
+               "?fields=\(fields)" +
                "&key=\(apiKey)"
     }
 }
@@ -107,11 +119,26 @@ class MapsService: MapServiceURL {
     func getLocation(latitude: Double, longitude: Double) async throws -> ReverseGeocodeModel? {
         do {
             let apiKey = try apiKeyManager.getGoogleApiKey()
-            let urlStr = "\(Constants.googleGeocodeBaseURL)json?latlng=\(latitude),\(longitude)&key=\(apiKey)"
+            let urlStr = getGoogleGeocodeURLStr(latitude: latitude, longitude: longitude, apiKey: apiKey)
             
             guard let url = URL(string: urlStr) else { return nil }
             
             let retVal = try await networkManager.get(url: url, type: ReverseGeocodeModel.self)
+            
+            return retVal
+        } catch {
+            throw error
+        }
+    }
+    
+    func getLocationDetails(placeId: String, fields: String = "location,displayName,id,formattedAddress") async throws -> GooglePlaceDetailsModel? {
+        do {
+            let apiKey = try apiKeyManager.getGoogleApiKey()
+            let urlStr = getPlaceDetailsURLStr(placeId: placeId, fields: fields, apiKey: apiKey)
+            
+            guard let url = URL(string: urlStr) else { return nil }
+            
+            let retVal = try await networkManager.get(url: url, type: GooglePlaceDetailsModel.self)
             
             return retVal
         } catch {

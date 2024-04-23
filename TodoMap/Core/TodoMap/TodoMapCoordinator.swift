@@ -13,14 +13,17 @@ enum TodoMapPage: String, CaseIterable, Identifiable {
     var id: String { self.rawValue }
 }
 
-enum TodoMapSheet: String, CaseIterable, Identifiable {
-    case placeSelection
+enum TodoMapFullCoverSheet: String, CaseIterable, Identifiable {
+    case todoListEditor
     var id: String { self.rawValue }
 }
 
 class TodoMapCoordinator: ObservableObject {
     @Published var path = NavigationPath()
-    @Published var sheet: TodoMapSheet?
+    @Published var fullCoverSheet: TodoMapFullCoverSheet?
+    
+    var onLocationSelect: ((LocationModel) -> Void)?
+    var location: LocationModel?
     
     func push(_ page: TodoMapPage) {
         path.append(page)
@@ -34,19 +37,41 @@ class TodoMapCoordinator: ObservableObject {
         path.removeLast(path.count)
     }
     
+    func dismissFullCover() {
+        self.fullCoverSheet = nil
+    }
+       
     @ViewBuilder
     func build(page: TodoMapPage) -> some View {
         switch page {
         case .placesSearch:
-            PlacesSearchView()
+            placesSearchView()
         }
     }
     
     @ViewBuilder
-    func build(sheet: TodoMapSheet) -> some View {
-        switch sheet {
-        case .placeSelection:
-            PlaceSelectionView()
+    func build(fullCoverSheet: TodoMapFullCoverSheet) -> some View {
+        switch fullCoverSheet {
+        case .todoListEditor:
+            TodoItemListEditView(todoItemGroup: .init(name: "", 
+                                                      items: [],
+                                                      location: self.location,
+                                                      created: Date(),
+                                                      status: .active),
+                                 coordinatorType: .todoMap,
+                                 saveOnChange: false)
         }
+    }
+    
+    @ViewBuilder
+    func placesSearchView() -> some View {
+        PlacesSearchView(
+            onLocationSelect: { location in
+                self.location = location
+                self.fullCoverSheet = .todoListEditor
+            },
+            handleBackBtnTapped: {
+                self.dismissFullCover()
+            })
     }
 }

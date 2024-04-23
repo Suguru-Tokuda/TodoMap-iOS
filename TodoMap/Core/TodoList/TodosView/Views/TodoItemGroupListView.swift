@@ -12,6 +12,7 @@ import CoreData
 struct TodoItemGroupListView: View {
     @StateObject var vm: TodosViewModel = TodosViewModel()
     @EnvironmentObject var coordinator: TodoListCoordinator
+    @EnvironmentObject var mainCoordinator: MainCoordinator
         
     var body: some View {
         ZStack {
@@ -23,15 +24,22 @@ struct TodoItemGroupListView: View {
                 itemList()
             }
         }
-        .task {
-            await vm.getAllLists()
-        }
         .alert(isPresented: $vm.errorOccured, error: vm.coreDataError) {
             Button(action: {
                 vm.supressError()
             }, label: {
                 Text("OK")
             })
+        }
+        .task {
+            await vm.getAllLists()
+        }
+        .onChange(of: mainCoordinator.tabSelection) { newValue in
+            if newValue == .todo {
+                Task(priority: .background) {
+                    await vm.getAllLists()
+                }
+            }
         }
     }
 }
@@ -60,16 +68,16 @@ extension TodoItemGroupListView {
     @ViewBuilder
     private func itemList() -> some View {
         List {
-            ForEach(Array(zip(vm.todoItemGroups.indices, vm.todoItemGroups)), id: \.0) { index, list in
-                TodoListCellView(todoItemGroup: list, itemCount: list.items.count)
+            ForEach(vm.todoItemGroups, id: \.self) { list in
+                TodoListCellView(name: list.name, created: list.created, itemCount: list.items.count)
                     .onTapGesture {
                         coordinator.push(.todoListEditor, todoListGroup: list)
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         Button(role: .destructive) {
                             Task(priority: .userInitiated) {
-                                await vm.deleteList(list, index)
-                            }                            
+                                await vm.deleteList(list)
+                            }
                         } label: {
                             Image(systemName: "trash.fill")
                         }
